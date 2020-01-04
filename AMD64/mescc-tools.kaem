@@ -76,22 +76,22 @@
 #########################################
 # Phase-5 Build M2-Planet from cc_amd64 #
 #########################################
-./catm hold ../M2-Planet/test/common_amd64/functions/file.c \
-	../M2-Planet/test/common_amd64/functions/malloc.c \
-	../M2-Planet/functions/calloc.c \
-	../M2-Planet/test/common_amd64/functions/exit.c \
-	../M2-Planet/functions/match.c \
-	../M2-Planet/functions/in_set.c \
-	../M2-Planet/functions/numerate_number.c \
-	../M2-Planet/functions/file_print.c \
-	../M2-Planet/functions/number_pack.c \
-	../M2-Planet/functions/string.c \
-	../M2-Planet/cc.h \
-	../M2-Planet/cc_reader.c \
-	../M2-Planet/cc_strings.c \
-	../M2-Planet/cc_types.c \
-	../M2-Planet/cc_core.c \
-	../M2-Planet/cc.c
+./catm hold ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	../sources/M2-Planet/functions/calloc.c \
+	../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	../sources/M2-Planet/functions/match.c \
+	../sources/M2-Planet/functions/in_set.c \
+	../sources/M2-Planet/functions/numerate_number.c \
+	../sources/M2-Planet/functions/file_print.c \
+	../sources/M2-Planet/functions/number_pack.c \
+	../sources/M2-Planet/functions/string.c \
+	../sources/M2-Planet/cc.h \
+	../sources/M2-Planet/cc_reader.c \
+	../sources/M2-Planet/cc_strings.c \
+	../sources/M2-Planet/cc_types.c \
+	../sources/M2-Planet/cc_core.c \
+	../sources/M2-Planet/cc.c
 ./cc_amd64 hold M2.M1
 ./catm hold amd64_defs.M1 libc-core.M1 M2.M1
 ./M0 hold temp1
@@ -102,13 +102,13 @@
 # Phase-6 Build blood-elf-0 from C sources  #
 #############################################
 ./M2 --architecture amd64 \
-	-f ../M2-Planet/test/common_amd64/functions/exit.c \
-	-f ../M2-Planet/test/common_amd64/functions/file.c \
-	-f ../M2-Planet/functions/file_print.c \
-	-f ../M2-Planet/test/common_amd64/functions/malloc.c \
-	-f ../M2-Planet/functions/calloc.c \
-	-f ../M2-Planet/functions/match.c \
-	-f ../mescc-tools/blood-elf.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	-f ../sources/M2-Planet/functions/file_print.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	-f ../sources/M2-Planet/functions/calloc.c \
+	-f ../sources/M2-Planet/functions/match.c \
+	-f ../sources/mescc-tools/blood-elf.c \
 	-o blood-elf.M1
 
 ./catm hold amd64_defs.M1 libc-core.M1 blood-elf.M1
@@ -122,16 +122,16 @@
 # Phase-7 Build hex2 from C sources #
 #####################################
 ./M2 --architecture amd64 \
-	-f ../M2-Planet/test/common_amd64/functions/exit.c \
-	-f ../M2-Planet/test/common_amd64/functions/file.c \
-	-f ../M2-Planet/functions/file_print.c \
-	-f ../M2-Planet/test/common_amd64/functions/malloc.c \
-	-f ../M2-Planet/functions/calloc.c \
-	-f ../M2-Planet/functions/match.c \
-	-f ../M2-Planet/functions/in_set.c \
-	-f ../M2-Planet/functions/numerate_number.c \
-	-f ../M2-Planet/test/common_amd64/functions/stat.c \
-	-f ../mescc-tools/hex2_linker.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	-f ../sources/M2-Planet/functions/file_print.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	-f ../sources/M2-Planet/functions/calloc.c \
+	-f ../sources/M2-Planet/functions/match.c \
+	-f ../sources/M2-Planet/functions/in_set.c \
+	-f ../sources/M2-Planet/functions/numerate_number.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/stat.c \
+	-f ../sources/mescc-tools/hex2_linker.c \
 	--debug \
 	-o hex2_linker.M1
 
@@ -147,16 +147,16 @@
 # Phase-8 Build M1 from C sources #
 ###################################
 ./M2 --architecture amd64 \
-	-f ../M2-Planet/test/common_amd64/functions/exit.c \
-	-f ../M2-Planet/test/common_amd64/functions/file.c \
-	-f ../M2-Planet/functions/file_print.c \
-	-f ../M2-Planet/test/common_amd64/functions/malloc.c \
-	-f ../M2-Planet/functions/calloc.c \
-	-f ../M2-Planet/functions/match.c \
-	-f ../M2-Planet/functions/in_set.c \
-	-f ../M2-Planet/functions/numerate_number.c \
-	-f ../M2-Planet/functions/string.c \
-	-f ../mescc-tools/M1-macro.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	-f ../sources/M2-Planet/functions/file_print.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	-f ../sources/M2-Planet/functions/calloc.c \
+	-f ../sources/M2-Planet/functions/match.c \
+	-f ../sources/M2-Planet/functions/in_set.c \
+	-f ../sources/M2-Planet/functions/numerate_number.c \
+	-f ../sources/M2-Planet/functions/string.c \
+	-f ../sources/mescc-tools/M1-macro.c \
 	--debug \
 	-o M1-macro.M1
 
@@ -179,13 +179,13 @@
 # Phase-9 Build final blood-elf from C sources  #
 #################################################
 ./M2 --architecture amd64 \
-	-f ../M2-Planet/test/common_amd64/functions/exit.c \
-	-f ../M2-Planet/test/common_amd64/functions/file.c \
-	-f ../M2-Planet/functions/file_print.c \
-	-f ../M2-Planet/test/common_amd64/functions/malloc.c \
-	-f ../M2-Planet/functions/calloc.c \
-	-f ../M2-Planet/functions/match.c \
-	-f ../mescc-tools/blood-elf.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	-f ../sources/M2-Planet/functions/file_print.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	-f ../sources/M2-Planet/functions/calloc.c \
+	-f ../sources/M2-Planet/functions/match.c \
+	-f ../sources/mescc-tools/blood-elf.c \
 	--debug \
 	-o blood-elf.M1
 
@@ -214,17 +214,17 @@
 # Phase-10 Build kaem from C sources#
 #####################################
 ./M2 --architecture amd64 \
-	-f ../M2-Planet/test/common_amd64/functions/exit.c \
-	-f ../M2-Planet/test/common_amd64/functions/file.c \
-	-f ../M2-Planet/functions/file_print.c \
-	-f ../M2-Planet/test/common_amd64/functions/malloc.c \
-	-f ../M2-Planet/functions/calloc.c \
-	-f ../M2-Planet/functions/match.c \
-	-f ../M2-Planet/functions/in_set.c \
-	-f ../M2-Planet/functions/numerate_number.c \
-	-f ../M2-Planet/test/common_amd64/functions/fork.c \
-	-f ../M2-Planet/test/common_amd64/functions/execve.c \
-	-f ../mescc-tools/kaem.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	-f ../sources/M2-Planet/functions/file_print.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	-f ../sources/M2-Planet/functions/calloc.c \
+	-f ../sources/M2-Planet/functions/match.c \
+	-f ../sources/M2-Planet/functions/in_set.c \
+	-f ../sources/M2-Planet/functions/numerate_number.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/fork.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/execve.c \
+	-f ../sources/mescc-tools/kaem.c \
 	--debug \
 	-o kaem.M1
 
@@ -254,14 +254,14 @@
 # Phase-11 Build get_machine from C sources #
 #############################################
 ./M2 --architecture amd64 \
-	-f ../M2-Planet/test/common_amd64/functions/exit.c \
-	-f ../M2-Planet/test/common_amd64/functions/file.c \
-	-f ../M2-Planet/functions/file_print.c \
-	-f ../M2-Planet/test/common_amd64/functions/malloc.c \
-	-f ../M2-Planet/functions/calloc.c \
-	-f ../M2-Planet/test/common_amd64/functions/uname.c \
-	-f ../M2-Planet/functions/match.c \
-	-f ../mescc-tools/get_machine.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	-f ../sources/M2-Planet/functions/file_print.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	-f ../sources/M2-Planet/functions/calloc.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/uname.c \
+	-f ../sources/M2-Planet/functions/match.c \
+	-f ../sources/mescc-tools/get_machine.c \
 	--debug \
 	-o get_machine.M1
 
@@ -287,22 +287,22 @@
 # Phase-12 Build M2-Planet from M2-Planet  #
 ############################################
 ./M2 --architecture amd64 \
-	-f ../M2-Planet/test/common_amd64/functions/file.c \
-	-f ../M2-Planet/test/common_amd64/functions/malloc.c \
-	-f ../M2-Planet/functions/calloc.c \
-	-f ../M2-Planet/test/common_amd64/functions/exit.c \
-	-f ../M2-Planet/functions/match.c \
-	-f ../M2-Planet/functions/in_set.c \
-	-f ../M2-Planet/functions/numerate_number.c \
-	-f ../M2-Planet/functions/file_print.c \
-	-f ../M2-Planet/functions/number_pack.c \
-	-f ../M2-Planet/functions/string.c \
-	-f ../M2-Planet/cc.h \
-	-f ../M2-Planet/cc_reader.c \
-	-f ../M2-Planet/cc_strings.c \
-	-f ../M2-Planet/cc_types.c \
-	-f ../M2-Planet/cc_core.c \
-	-f ../M2-Planet/cc.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	-f ../sources/M2-Planet/functions/calloc.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	-f ../sources/M2-Planet/functions/match.c \
+	-f ../sources/M2-Planet/functions/in_set.c \
+	-f ../sources/M2-Planet/functions/numerate_number.c \
+	-f ../sources/M2-Planet/functions/file_print.c \
+	-f ../sources/M2-Planet/functions/number_pack.c \
+	-f ../sources/M2-Planet/functions/string.c \
+	-f ../sources/M2-Planet/cc.h \
+	-f ../sources/M2-Planet/cc_reader.c \
+	-f ../sources/M2-Planet/cc_strings.c \
+	-f ../sources/M2-Planet/cc_types.c \
+	-f ../sources/M2-Planet/cc_core.c \
+	-f ../sources/M2-Planet/cc.c \
 	--debug \
 	-o M2.M1
 

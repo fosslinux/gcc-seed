@@ -30,6 +30,7 @@
 # Phase-13 Build Mes-M2 from M2-Planet     #
 ############################################
 ../bin/M2-Planet --debug --architecture amd64 \
+<<<<<<< HEAD
 	-f ../mes-m2/mes.h \
 	-f ../M2-Planet/test/common_amd64/functions/file.c \
 	-f ../M2-Planet/test/common_amd64/functions/exit.c \
@@ -54,19 +55,43 @@
 	-f ../mes-m2/functions/match.c \
 	-f ../mes-m2/functions/in_set.c \
 	-f ../mes-m2/functions/file_print.c \
+=======
+	-f ../sources/mes-m2/mes.h \
+	-f ../sources/M2-Planet/test/common_amd64/functions/file.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/exit.c \
+	-f ../sources/M2-Planet/test/common_amd64/functions/malloc.c \
+	-f ../sources/M2-Planet/functions/calloc.c \
+	-f ../sources/mes-m2/mes.c \
+	-f ../sources/mes-m2/mes_cell.c \
+	-f ../sources/mes-m2/mes_builtins.c \
+	-f ../sources/mes-m2/mes_eval.c \
+	-f ../sources/mes-m2/mes_print.c \
+	-f ../sources/mes-m2/mes_read.c \
+	-f ../sources/mes-m2/mes_tokenize.c \
+	-f ../sources/mes-m2/mes_vector.c \
+	-f ../sources/mes-m2/mes_list.c \
+	-f ../sources/mes-m2/mes_string.c \
+	-f ../sources/mes-m2/mes_record.c \
+	-f ../sources/mes-m2/mes_init.c \
+	-f ../sources/mes-m2/mes_macro.c \
+	-f ../sources/mes-m2/mes_posix.c \
+	-f ../sources/mes-m2/functions/numerate_number.c \
+	-f ../sources/mes-m2/functions/match.c \
+	-f ../sources/mes-m2/functions/file_print.c \
+>>>>>>> fix hex0 -> mes-m2 bootstrap to use ../sources
 	-o mes.M1
 
 ../bin/blood-elf --64 -f mes.M1 -o mes-footer.M1
 
-../bin/M1 -f ../M2-Planet/test/common_amd64/amd64_defs.M1 \
-	-f ../M2-Planet/test/common_amd64/libc-core.M1 \
+../bin/M1 -f ../sources/M2-Planet/test/common_amd64/amd64_defs.M1 \
+	-f ../sources/M2-Planet/test/common_amd64/libc-core.M1 \
 	-f mes.M1 \
 	-f mes-footer.M1 \
 	--LittleEndian \
 	--architecture amd64 \
 	-o mes.hex2
 
-../bin/hex2 -f ../M2-Planet/test/common_amd64/ELF-amd64-debug.hex2 \
+../bin/hex2 -f ../sources/M2-Planet/test/common_amd64/ELF-amd64-debug.hex2 \
 	-f mes.hex2 \
 	--LittleEndian \
 	--architecture amd64 \
