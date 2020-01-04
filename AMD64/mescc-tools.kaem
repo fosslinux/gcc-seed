@@ -224,6 +224,7 @@
 	-f ../sources/M2-Planet/functions/numerate_number.c \
 	-f ../sources/M2-Planet/test/common_amd64/functions/fork.c \
 	-f ../sources/M2-Planet/test/common_amd64/functions/execve.c \
+	-f ../sources/M2-Planet/functions/string.c \
 	-f ../sources/mescc-tools/kaem.c \
 	--debug \
 	-o kaem.M1

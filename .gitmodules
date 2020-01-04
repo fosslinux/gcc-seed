@@ -7,3 +7,9 @@
 [submodule "sources/mes-m2"]
 	path = sources/mes-m2
 	url = https://github.com/oriansj/mes-m2.git
+[submodule "sources/nyacc"]
+	path = sources/nyacc
+	url = https://git.savannah.nongnu.org/git/nyacc.git
+[submodule "sources/mes"]
+	path = sources/mes
+	url = git@github.com:fosslinux/mes.git

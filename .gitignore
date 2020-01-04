@@ -6,6 +6,7 @@ bin/blood-elf
 bin/get_machine
 bin/hex2
 bin/kaem
+bin/mes
 
 # This was a hand generated and audited file
 # Do not trust it
