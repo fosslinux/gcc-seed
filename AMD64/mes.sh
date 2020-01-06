@@ -8,8 +8,13 @@ cp seed/mes-amd64-seed bin/mes
 
 cd sources/mes
 
+export GUILE_LOAD_PATH=$(pwd)/nyacc/module:$GUILE_LOAD_PATH
 export CC=$(pwd)/../mes-assets/mescc
 
-sh configure.sh --prefix=$(pwd)/../../tmp --host=x86_64
+cp -rf ../nyacc ./nyacc
+
+sh configure.sh --prefix=$(pwd) --host=x86_64-linux-gnu
 sh bootstrap.sh
-cp bin/mes ../../bin/mes
+
+# We do not use the resulting mes because it is a bit b0rked
+# However we used the resulting libc for the early stages of TinyCC

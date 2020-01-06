@@ -35,8 +35,16 @@
 
 ../kaem-optional-seed --verbose --strict --file mes-m2.kaem
 
-####################################
-# Phase-14 Build Mes from seed Mes #
-####################################
+#########################################
+# Phase-14 Build Mes libc from seed Mes #
+#########################################
 
 sh -x ./mes.sh
+
+#########################
+# Phase-15 Build TinyCC #
+#########################
+
+sh -x ./tinycc.sh
+
+/busybox sh

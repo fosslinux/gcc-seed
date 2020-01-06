@@ -13,3 +13,6 @@
 [submodule "sources/mes"]
 	path = sources/mes
 	url = git@github.com:fosslinux/mes.git
+[submodule "sources/tinycc-mes"]
+	path = sources/tinycc-mes
+	url = https://github.com/fosslinux/tinycc-mes
