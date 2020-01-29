@@ -45,4 +45,10 @@ sh -x ./mes.sh
 # Phase-15 Build TinyCC #
 #########################
 
-sh -x ./tinycc.sh
+sh -x ./tcc-mes.sh
+
+############################
+# Phase-16 Build Make 3.80 #
+############################
+
+sh -x ./make-tcc.sh

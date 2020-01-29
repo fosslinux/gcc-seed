@@ -7,6 +7,7 @@ bin/get_machine
 bin/hex2
 bin/kaem
 bin/tcc
+bin/make
 
 # These was a hand generated and audited file
 # Do not trust it

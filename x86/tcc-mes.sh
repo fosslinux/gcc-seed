@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -ex
+
 export REPO=$(pwd)/..
 export CC=$(pwd)/../mes-assets/mescc
 

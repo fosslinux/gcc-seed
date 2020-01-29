@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -ex
+
 export REPO=$(pwd)/..
 
 cd ..

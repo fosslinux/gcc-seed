@@ -16,3 +16,9 @@
 [submodule "sources/tinycc-mes"]
 	path = sources/tinycc-mes
 	url = https://github.com/fosslinux/tinycc-mes
+[submodule "sources/mes"]
+	path = sources/mes
+	url = https://github.com/fosslinux/mes
+[submodule "sources/make-tcc"]
+	path = sources/make-tcc
+	url = https://github.com/fosslinux/make-tcc.git
