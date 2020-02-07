@@ -25,9 +25,9 @@ fi
 export bindir=${REPO}/sources/mes/scripts
 export MES_PREFIX=${REPO}/sources/mes
 
-export HEX2=${REPO}/bin/hex2
-export M1=${REPO}/bin/M1
-export BLOOD_ELF=${REPO}/bin/blood-elf
+export HEX2=${REPO}/staging/bin/hex2
+export M1=${REPO}/staging/bin/M1
+export BLOOD_ELF=${REPO}/staging/bin/blood-elf
 
 export SCHEME=mes
 export MES_ARENA=20000000

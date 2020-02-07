@@ -10,13 +10,14 @@ rm -f bin/mes
 cd sources/mes
 
 export GUILE_LOAD_PATH=$(pwd)/nyacc/module:$GUILE_LOAD_PATH
-export CC=$(pwd)/../mes-assets/mescc
-export HEX2=${REPO}/bin/hex2
-export M1=${REPO}/bin/M1
+export CC=${REPO}/sources/mes-assets/mescc
+export HEX2=${REPO}/staging/bin/hex2
+export M1=${REPO}/staging/bin/M1
 export BLOOD_ELF=${REPO}/bin/blood-elf
 
 cp -rf ../nyacc ./nyacc
 
+# We do not use staging here because things are too interdependent
 sh configure.sh --prefix=$(pwd) --host=x86-linux-gnu
 sh bootstrap.sh
 
