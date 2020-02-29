@@ -18,21 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Mes.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
-# Can also be run by kaem or any other shell of your personal choice
-# To run in kaem simply: kaem --verbose --strict
 # Warning all binaries prior to the use of blood-elf will not be readable by
 # Objdump, you may need to use ndism or gdb to view the assembly in the binary.
-
-
-
-###############################################
-# Phase-0 Build hex0 from bootstrapped binary #
-###############################################
-./hex0-seed hex0_x86.hex0 hex0
-# hex0 should have the exact same checksum as hex0-seed as they are both supposed
-# to be built from hex0_x86.hex0 and by definition must be identical
 
 #################################
 # Phase-1 Build hex1 from hex0  #
@@ -72,7 +59,6 @@
 ./catm hold ELF-i386.hex2 temp1
 ./hex2-0 hold cc_x86
 
-
 #########################################
 # Phase-5 Build M2-Planet from cc_x86   #
 #########################################
@@ -110,6 +96,8 @@
 	-f ../sources/M2-Planet/functions/calloc.c \
 	-f ../sources/M2-Planet/functions/match.c \
 	-f ../sources/mescc-tools/blood-elf.c \
+	-f ../sources/M2-Planet/functions/require.c \
+	-f ../sources/M2-Planet/functions/in_set.c \
 	-o blood-elf.M1
 
 ./catm hold x86_defs.M1 libc-core.M1 blood-elf.M1
@@ -129,6 +117,7 @@
 	-f ../sources/M2-Planet/test/common_x86/functions/malloc.c \
 	-f ../sources/M2-Planet/functions/calloc.c \
 	-f ../sources/M2-Planet/functions/match.c \
+	-f ../sources/M2-Planet/functions/require.c \
 	-f ../sources/M2-Planet/functions/in_set.c \
 	-f ../sources/M2-Planet/functions/numerate_number.c \
 	-f ../sources/M2-Planet/test/common_x86/functions/stat.c \
@@ -157,6 +146,7 @@
 	-f ../sources/M2-Planet/functions/in_set.c \
 	-f ../sources/M2-Planet/functions/numerate_number.c \
 	-f ../sources/M2-Planet/functions/string.c \
+	-f ../sources/M2-Planet/functions/require.c \
 	-f ../sources/mescc-tools/M1-macro.c \
 	--debug \
 	-o M1-macro.M1
@@ -176,43 +166,8 @@
 # M0 is used, as we will being using it's much more powerful and cross-platform
 # version with a bunch of extra goodies.
 
-#################################################
-# Phase-9 Build final blood-elf from C sources  #
-#################################################
-./M2 --architecture x86 \
-	-f ../sources/M2-Planet/test/common_x86/functions/exit.c \
-	-f ../sources/M2-Planet/test/common_x86/functions/file.c \
-	-f ../sources/M2-Planet/functions/file_print.c \
-	-f ../sources/M2-Planet/test/common_x86/functions/malloc.c \
-	-f ../sources/M2-Planet/functions/calloc.c \
-	-f ../sources/M2-Planet/functions/match.c \
-	-f ../sources/mescc-tools/blood-elf.c \
-	--debug \
-	-o blood-elf.M1
-
-./blood-elf-0 -f blood-elf.M1 -o blood-elf-footer.M1
-../staging/bin/M1 -f x86_defs.M1 \
-	-f libc-core.M1 \
-	-f blood-elf.M1 \
-	-f blood-elf-footer.M1 \
-	--LittleEndian \
-	--architecture x86 \
-	-o hold
-
-../staging/bin/hex2 -f ELF-i386-debug.hex2 \
-	-f hold \
-	--LittleEndian \
-	--architecture x86 \
-	--BaseAddress 0x8048000 \
-	-o ../staging/bin/blood-elf \
-	--exec_enable
-
-# Now we have our shipping debuggable blood-elf, the rest will be down hill from
-# here as we have ALL of the core pieces of compiling and assembling debuggable
-# programs in a debuggable form with corresponding C source code.
-
 #####################################
-# Phase-10 Build kaem from C sources#
+# Phase-9 Build kaem from C sources #
 #####################################
 ./M2 --architecture x86 \
 	-f ../sources/M2-Planet/test/common_x86/functions/exit.c \
@@ -225,12 +180,15 @@
 	-f ../sources/M2-Planet/functions/numerate_number.c \
 	-f ../sources/M2-Planet/test/common_x86/functions/fork.c \
 	-f ../sources/M2-Planet/test/common_x86/functions/execve.c \
+	-f ../sources/M2-Planet/test/common_x86/functions/chdir.c \
+	-f ../sources/M2-Planet/test/common_x86/functions/getcwd.c \
     -f ../sources/M2-Planet/functions/string.c \
-	-f ../sources/mescc-tools/kaem.c \
+	-f ../sources/M2-Planet/functions/require.c \
+	-f ../sources/mescc-tools/kaem/kaem.c \
 	--debug \
 	-o kaem.M1
 
-../staging/bin/blood-elf -f kaem.M1 -o kaem-footer.M1
+./blood-elf-0 -f kaem.M1 -o kaem-footer.M1
 
 ../staging/bin/M1 -f x86_defs.M1 \
 	-f libc-core.M1 \
@@ -248,84 +206,3 @@
 	-o ../staging/bin/kaem \
 	--exec_enable
 
-# This kaem should have the exact same checksum as the kaem-optional-seed
-# As that binary should be been build by the above process with only a minor
-# move/rename step applied at the end. This binary can run this script
-
-#############################################
-# Phase-11 Build get_machine from C sources #
-#############################################
-./M2 --architecture x86 \
-	-f ../sources/M2-Planet/test/common_x86/functions/exit.c \
-	-f ../sources/M2-Planet/test/common_x86/functions/file.c \
-	-f ../sources/M2-Planet/functions/file_print.c \
-	-f ../sources/M2-Planet/test/common_x86/functions/malloc.c \
-	-f ../sources/M2-Planet/functions/calloc.c \
-	-f ../sources/M2-Planet/test/common_x86/functions/uname.c \
-	-f ../sources/M2-Planet/functions/match.c \
-	-f ../sources/mescc-tools/get_machine.c \
-	--debug \
-	-o get_machine.M1
-
-../staging/bin/blood-elf -f get_machine.M1 -o get_machine-footer.M1
-
-../staging/bin/M1 -f x86_defs.M1 \
-	-f libc-core.M1 \
-	-f get_machine.M1 \
-	-f get_machine-footer.M1 \
-	--LittleEndian \
-	--architecture x86 \
-	-o hold
-
-../staging/bin/hex2 -f ELF-i386-debug.hex2 \
-	-f hold \
-	--LittleEndian \
-	--architecture x86 \
-	--BaseAddress 0x8048000 \
-	-o ../staging/bin/get_machine \
-	--exec_enable
-
-############################################
-# Phase-12 Build M2-Planet from M2-Planet  #
-############################################
-./M2 --architecture x86 \
-	-f ../sources/M2-Planet/test/common_x86/functions/file.c \
-	-f ../sources/M2-Planet/test/common_x86/functions/malloc.c \
-	-f ../sources/M2-Planet/functions/calloc.c \
-	-f ../sources/M2-Planet/test/common_x86/functions/exit.c \
-	-f ../sources/M2-Planet/functions/match.c \
-	-f ../sources/M2-Planet/functions/in_set.c \
-	-f ../sources/M2-Planet/functions/numerate_number.c \
-	-f ../sources/M2-Planet/functions/file_print.c \
-	-f ../sources/M2-Planet/functions/number_pack.c \
-	-f ../sources/M2-Planet/functions/string.c \
-	-f ../sources/M2-Planet/functions/require.c \
-	-f ../sources/M2-Planet/cc.h \
-	-f ../sources/M2-Planet/cc_reader.c \
-	-f ../sources/M2-Planet/cc_strings.c \
-	-f ../sources/M2-Planet/cc_types.c \
-	-f ../sources/M2-Planet/cc_core.c \
-	-f ../sources/M2-Planet/cc.c \
-	--debug \
-	-o M2.M1
-
-../staging/bin/blood-elf -f M2.M1 -o M2-footer.M1
-
-../staging/bin/M1 -f x86_defs.M1 \
-	-f libc-core.M1 \
-	-f M2.M1 \
-	-f M2-footer.M1 \
-	--LittleEndian \
-	--architecture x86 \
-	-o hold
-
-../staging/bin/hex2 -f ELF-i386-debug.hex2 \
-	-f hold \
-	--LittleEndian \
-	--architecture x86 \
-	--BaseAddress 0x8048000 \
-	-o ../staging/bin/M2-Planet \
-	--exec_enable
-
-# Congrats you successfully completed the bootstrap of mescc-tools;
-# the resulting binaries that you want are in bin

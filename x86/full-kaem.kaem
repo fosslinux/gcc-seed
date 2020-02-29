@@ -1,0 +1,34 @@
+#!/bin/sh
+
+REPO=/home/styler/projects/bootstrap/gcc-seed
+GUILE_PREFIX=/usr/local
+
+#######################################
+# Phase 10-12 Finish mescc-tools.kaem #
+#######################################
+
+../staging/bin/kaem --verbose --strict -f mescc-tools.full.kaem
+
+############################################
+# Phase-13 Build Mes-M2 from M2-Planet     #
+############################################
+
+../staging/bin/kaem --verbose --strict -f mes-m2.kaem
+
+#########################################
+# Phase-14 Build Mes libc from seed Mes #
+#########################################
+
+${REPO}/sources/gash/scripts/gash ./mes.sh
+
+#########################
+# Phase-15 Build TinyCC #
+#########################
+
+${REPO}/sources/gash/scripts/gash ./tcc-mes.sh
+
+############################
+# Phase-16 Build Make 3.80 #
+############################
+
+${REPO}/sources/gash/scripts/gash ./make-tcc.sh
