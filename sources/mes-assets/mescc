@@ -23,6 +23,7 @@ if [ "$V" = 2 ]; then
 fi
 
 export bindir=${REPO}/sources/mes/scripts
+export SCHEME=guile
 export MES_PREFIX=${REPO}/sources/mes
 
 export HEX2=${REPO}/staging/bin/hex2
