@@ -19,3 +19,12 @@
 [submodule "sources/kaem"]
 	path = sources/kaem
 	url = https://github.com/oriansj/kaem
+[submodule "sources/make-tcc"]
+	path = sources/make-tcc
+	url = https://github.com/fosslinux/make-tcc.git
+[submodule "sources/gash"]
+	path = sources/gash
+	url = https://git.savannah.gnu.org/git/gash.git/
+[submodule "sources/gash-core-utils"]
+	path = sources/gash-core-utils
+	url = https://gitlab.com/janneke/gash

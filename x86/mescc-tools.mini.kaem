@@ -184,7 +184,6 @@
 	-f ../sources/M2-Planet/test/common_x86/functions/getcwd.c \
     -f ../sources/M2-Planet/functions/string.c \
 	-f ../sources/M2-Planet/functions/require.c \
-	-f ../sources/M2-Planet/test/common_x86/functions/fflush.c \
 	-f ../sources/kaem/kaem.h \
 	-f ../sources/kaem/variable.c \
 	-f ../sources/kaem/kaem.c \

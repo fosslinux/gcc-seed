@@ -1,6 +1,10 @@
 #!/bin/sh
 
-REPO=/home/styler/projects/bootstrap/gcc-seed
+set -ex
+
+# SET THESE!
+
+REPO=/
 GUILE_PREFIX=/usr/local
 
 #######################################
@@ -15,20 +19,20 @@ GUILE_PREFIX=/usr/local
 
 ../staging/bin/kaem --verbose --strict -f mes-m2.kaem
 
-#########################################
-# Phase-14 Build Mes libc from seed Mes #
-#########################################
+###########################
+# Phase-14 Build Mes libc #
+###########################
 
-${REPO}/sources/gash/scripts/gash ./mes.sh
+${REPO}/sources/gash-assets/gash ./mes.sh
 
 #########################
 # Phase-15 Build TinyCC #
 #########################
 
-${REPO}/sources/gash/scripts/gash ./tcc-mes.sh
+${REPO}/sources/gash-assets/gash ./tcc-mes.sh
 
 ############################
 # Phase-16 Build Make 3.80 #
 ############################
 
-${REPO}/sources/gash/scripts/gash ./make-tcc.sh
+${REPO}/sources/gash-assets/gash ./make-tcc.sh
