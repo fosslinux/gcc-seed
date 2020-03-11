@@ -10,15 +10,12 @@
 [submodule "sources/nyacc"]
 	path = sources/nyacc
 	url = https://git.savannah.nongnu.org/git/nyacc.git
-[submodule "sources/mes"]
-	path = sources/mes
-	url = git@github.com:fosslinux/mes.git
 [submodule "sources/tinycc-mes"]
 	path = sources/tinycc-mes
 	url = https://github.com/fosslinux/tinycc-mes
 [submodule "sources/mes"]
 	path = sources/mes
 	url = https://github.com/fosslinux/mes
-[submodule "sources/make-tcc"]
-	path = sources/make-tcc
-	url = https://github.com/fosslinux/make-tcc.git
+[submodule "sources/kaem"]
+	path = sources/kaem
+	url = https://github.com/oriansj/kaem
