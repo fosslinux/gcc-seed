@@ -1,5 +1,5 @@
 #! /usr/bin/guile \
---no-auto-compile -e main -L /usr/local/share/guile/site/2.0 -C /usr/local/lib/guile/2.0/site-ccache -s
+--no-auto-compile -e main -L /usr/local/share/guile/site/${GUILE_VERSION} -C /usr/local/lib/guile/2.0/site-ccache -s
 !#
 ;;; GNU Mes --- Maxwell Equations of Software
 ;;; Copyright © 2016,2017,2018,2019 Jan (janneke) Nieuwenhuizen <janneke@gnu.org>
