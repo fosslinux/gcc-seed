@@ -4,9 +4,9 @@ set -ex
 
 # SET THESE!
 
-REPO=/
-GUILE_PREFIX=/usr/local
-GUILE_VERSION=2.2
+#REPO=/
+#GUILE_PREFIX=/usr/local
+#GUILE_VERSION=2.2
 
 #######################################
 # Phase 10-12 Finish mescc-tools.kaem #
@@ -37,3 +37,9 @@ ${REPO}/sources/gash-assets/gash ./tcc-mes.sh
 ############################
 
 ${REPO}/sources/gash-assets/gash ./make-tcc.sh
+
+#############################
+# Phase-17 Build bash 2.09b #
+#############################
+
+${REPO}/sources/gash-assets/gash ./bash-tcc.sh

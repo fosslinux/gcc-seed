@@ -28,3 +28,6 @@
 [submodule "sources/gash-core-utils"]
 	path = sources/gash-core-utils
 	url = https://gitlab.com/janneke/gash
+[submodule "sources/bash-tcc"]
+	path = sources/bash-tcc
+	url = https://github.com/fosslinux/bash-tcc.git
