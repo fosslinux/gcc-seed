@@ -56,9 +56,9 @@
 	--debug \
 	-o get_machine.M1
 
-../bin/blood-elf -f get_machine.M1 -o get_machine-footer.M1
+../staging/bin/blood-elf -f get_machine.M1 -o get_machine-footer.M1
 
-../bin/M1 -f x86_defs.M1 \
+../staging/bin/M1 -f x86_defs.M1 \
 	-f libc-core.M1 \
 	-f get_machine.M1 \
 	-f get_machine-footer.M1 \
@@ -66,12 +66,12 @@
 	--architecture x86 \
 	-o hold
 
-../bin/hex2 -f ELF-i386-debug.hex2 \
+../staging/bin/hex2 -f ELF-i386-debug.hex2 \
 	-f hold \
 	--LittleEndian \
 	--architecture x86 \
 	--BaseAddress 0x8048000 \
-	-o ../bin/get_machine \
+	-o ../staging/bin/get_machine \
 	--exec_enable
 
 ############################################
@@ -98,9 +98,9 @@
 	--debug \
 	-o M2.M1
 
-../bin/blood-elf -f M2.M1 -o M2-footer.M1
+../staging/bin/blood-elf -f M2.M1 -o M2-footer.M1
 
-../bin/M1 -f x86_defs.M1 \
+../staging/bin/M1 -f x86_defs.M1 \
 	-f libc-core.M1 \
 	-f M2.M1 \
 	-f M2-footer.M1 \
@@ -108,10 +108,10 @@
 	--architecture x86 \
 	-o hold
 
-../bin/hex2 -f ELF-i386-debug.hex2 \
+../staging/bin/hex2 -f ELF-i386-debug.hex2 \
 	-f hold \
 	--LittleEndian \
 	--architecture x86 \
 	--BaseAddress 0x8048000 \
-	-o ../bin/M2-Planet \
+	-o ../staging/bin/M2-Planet \
 	--exec_enable
