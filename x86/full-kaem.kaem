@@ -2,12 +2,16 @@
 
 set -ex
 
-# SET THESE!
-
+# XXX: SET ME!
 #REPO=/
+
 GUILE_PREFIX=${REPO}/guile
 GUILE_VERSION=2.0
-PATH=${REPO}/guile/bin:${PATH}
+PATH=${REPO}/guile_seed/bin:${REPO}/staging/bin:${REPO}/sources/gash-assets:${REPO}/sources/mes-assets
+LD_LIBRARY_PATH=${REPO}/staging/lib
+CPATH=${REPO}/staging/include
+C_INCLUDE_PATH=${REPO}/staging/include
+CXX_INCLUDE_PATH=${REPO}/staging/include
 
 #######################################
 # Phase 10-12 Finish mescc-tools.kaem #

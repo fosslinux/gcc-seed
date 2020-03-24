@@ -1,7 +1,5 @@
 # Make sure binaries are never imported
-bin/
-staging/bin
-staging/lib
+/staging
 
 # Build artifacts
 sources/mes/nyacc

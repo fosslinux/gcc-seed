@@ -18,4 +18,4 @@
 
 ../../bootstrap-seeds/kaem-optional-seed seed-kaem.kaem
 ./kaem-0 mescc-tools.mini.kaem
-../staging/bin/kaem --verbose --strict -f full-kaem.kaem
+../staging/bin/kaem --verbose --strict --init-mode -f full-kaem.kaem
