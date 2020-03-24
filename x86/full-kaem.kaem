@@ -5,8 +5,9 @@ set -ex
 # SET THESE!
 
 #REPO=/
-#GUILE_PREFIX=/usr/local
-#GUILE_VERSION=2.2
+GUILE_PREFIX=${REPO}/guile
+GUILE_VERSION=2.0
+PATH=${REPO}/guile/bin:${PATH}
 
 #######################################
 # Phase 10-12 Finish mescc-tools.kaem #
