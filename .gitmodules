@@ -10,24 +10,27 @@
 [submodule "sources/nyacc"]
 	path = sources/nyacc
 	url = https://git.savannah.nongnu.org/git/nyacc.git
-[submodule "sources/tinycc-mes"]
-	path = sources/tinycc-mes
-	url = https://github.com/fosslinux/tinycc-mes
-[submodule "sources/mes"]
-	path = sources/mes
-	url = https://github.com/fosslinux/mes
+[submodule "sources/tinycc"]
+	path = sources/tinycc-0.9.26
+	url = https://github.com/fosslinux/tinycc
 [submodule "sources/kaem"]
 	path = sources/kaem
 	url = https://github.com/oriansj/kaem
-[submodule "sources/make-tcc"]
-	path = sources/make-tcc
-	url = https://github.com/fosslinux/make-tcc.git
+[submodule "sources/make-3.80"]
+	path = sources/make-3.80
+	url = https://github.com/fosslinux/make-3.80
 [submodule "sources/gash"]
 	path = sources/gash
 	url = https://git.savannah.gnu.org/git/gash.git/
 [submodule "sources/gash-core-utils"]
 	path = sources/gash-core-utils
 	url = https://gitlab.com/janneke/gash
-[submodule "sources/bash-tcc"]
-	path = sources/bash-tcc
-	url = https://github.com/fosslinux/bash-tcc.git
+[submodule "sources/bash-2.09b"]
+	path = sources/bash-2.09b
+	url = https://github.com/fosslinux/bash-2.09b
+[submodule "sources/mes"]
+	path = sources/mes
+	url = https://github.com/fosslinux/mes
+[submodule "sources/tinycc-0.9.27"]
+	path = sources/tinycc-0.9.27
+	url = https://github.com/fosslinux/tinycc-0.9.27.git

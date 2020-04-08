@@ -3,15 +3,19 @@
 set -ex
 
 # XXX: SET ME!
-#REPO=/
+REPO=/home/samuel/projects/gcc-seed
 
-GUILE_PREFIX=${REPO}/guile
-GUILE_VERSION=2.0
-PATH=${REPO}/guile_seed/bin:${REPO}/staging/bin:${REPO}/sources/gash-assets:${REPO}/sources/mes-assets
+PATH=${REPO}/staging/bin:${REPO}/sources/gash-assets:${REPO}/sources/mes-assets:${REPO}/guile_seed/bin
 LD_LIBRARY_PATH=${REPO}/staging/lib
 CPATH=${REPO}/staging/include
 C_INCLUDE_PATH=${REPO}/staging/include
 CXX_INCLUDE_PATH=${REPO}/staging/include
+GUILE_LOAD_PATH=${REPO}/guile_seed/share/guile/2.0
+
+HOME=${REPO}/fake-home
+USER=fakeuser
+LOGNAME=fakeuser
+USERNAME=fakeuser
 
 #######################################
 # Phase 10-12 Finish mescc-tools.kaem #
@@ -25,26 +29,35 @@ CXX_INCLUDE_PATH=${REPO}/staging/include
 
 ../staging/bin/kaem --verbose --strict -f mes-m2.kaem
 
+################################
+# Phase-14 Create gash scripts #
+################################
+
+kaem --strict gash-p1.sh
+kaem --strict gash-p2.sh
+
 ###########################
-# Phase-14 Build Mes libc #
+# Phase-15 Build Mes libc #
 ###########################
 
-${REPO}/sources/gash-assets/gash ./mes.sh
+sh mes.sh
+GUILE_LOAD_PATH=${REPO}/sources/mes-assets/modules:${REPO}/sources/mes/modules:${REPO}/sources/nyacc/module:${GUILE_LOAD_PATH}
 
 #########################
-# Phase-15 Build TinyCC #
+# Phase-16 Build TinyCC #
 #########################
 
-${REPO}/sources/gash-assets/gash ./tcc-mes.sh
+sh tinycc-0.9.26.sh
+sh tinycc-0.9.27.sh
 
 ############################
-# Phase-16 Build Make 3.80 #
+# Phase-17 Build Make 3.80 #
 ############################
 
-${REPO}/sources/gash-assets/gash ./make-tcc.sh
+sh make-3.80.sh
 
 #############################
-# Phase-17 Build bash 2.09b #
+# Phase-18 Build bash 2.09b #
 #############################
 
-${REPO}/sources/gash-assets/gash ./bash-tcc.sh
+sh bash-2.09b.sh

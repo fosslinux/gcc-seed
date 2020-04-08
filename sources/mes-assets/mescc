@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/home/samuel/projects/gcc-seed/staging/bin/gash
 
 # GNU Mes --- Maxwell Equations of Software
 # Copyright © 2018,2019 Jan (janneke) Nieuwenhuizen <janneke@gnu.org>
@@ -22,8 +22,8 @@ if test "$V" = 2 ; then
     set -x
 fi
 
-export bindir=${REPO}/sources/mes/scripts
-export SCHEME=guile
+export bindir=${REPO}/sources/mes-assets
+export SCHEME=${REPO}/guile_seed/bin/guile
 export MES_PREFIX=${REPO}/sources/mes
 
 export HEX2=${REPO}/staging/bin/hex2

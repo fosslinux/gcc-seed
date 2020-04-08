@@ -1,0 +1,4 @@
+#!kaem
+
+set -e
+echo "$@"

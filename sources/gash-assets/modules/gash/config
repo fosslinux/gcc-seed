@@ -1,0 +1,3 @@
+#!kaem
+
+guile --no-auto-compile -L ${REPO}/guile_seed/share/guile/site/2.0 -L ${REPO}/sources/gash -L ${REPO}/sources/gash-core-utils -L ${REPO}/sources/gash-assets/modules -e main -s ${REPO}/sources/gash-assets/config.scm $@

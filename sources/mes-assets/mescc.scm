@@ -42,8 +42,8 @@
 (define %version (if (string-prefix? "@VERSION" "0.21") "git"
                      "0.21"))
 
-(define %arch (if (string-prefix? "@mes_cpu" "x86_64") %arch
-                  "x86_64"))
+(define %arch (if (string-prefix? "@mes_cpu" "x86") %arch
+                  "x86"))
 
 (define %kernel (if (string-prefix? "@mes_kernel" "linux") %kernel
                     "linux"))

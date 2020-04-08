@@ -1,0 +1,4 @@
+#!/home/samuel/projects/gcc-seed/staging/bin/kaem
+
+set -e
+echo "$@"
