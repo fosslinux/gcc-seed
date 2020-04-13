@@ -23,6 +23,7 @@ cd ${REPO}/sources/make-3.80
 cp ${REPO}/staging/lib/crt*.o .
 
 sh configure \
+    --prefix=${REPO}/staging \
     --disable-gettext \
     --disable-nls \
     --build=i686-unknown-linux-gnu \

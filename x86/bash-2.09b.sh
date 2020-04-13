@@ -13,16 +13,21 @@ export MAKE_SHELL="${REPO}/staging/bin/sh"
 export CONFIG_SHELL="${REPO}/staging/bin/sh"
 export RANLIB=""
 export YACC=""
-
 export CFLAGS="-D _POSIX_VERSION=1"
 
 cd ${REPO}/sources/bash-2.09b
+
 cp ${REPO}/staging/lib/crt*.o .
 cp ${REPO}/staging/lib/crt*.o support/
 cp ${REPO}/staging/lib/crt*.o builtins/
 cp ${REPO}/staging/lib/libgetopt.a .
 
+export INSTALL="${REPO}/staging/bin/sh $(pwd)/support/install.sh"
+
 sh configure \
+    --prefix=${REPO}/staging \
+    --infodir=${REPO}/staging/share/info \
+    --mandir=${REPO}/staging/share/man \
     --build=i686-unknown-linux-gnu \
     --host=i686-unknown-linux-gnu \
     --without-bash-malloc \
@@ -36,6 +41,7 @@ sh configure \
 
 make
 
-cp bash ${REPO}/staging/bin/bash
+make install
+
 rm -f ${REPO}/staging/bin/sh
 ln -s bash ${REPO}/staging/bin/sh
