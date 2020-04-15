@@ -35,12 +35,16 @@ USERNAME=fakeuser
 
 kaem --strict gash-p1.sh
 kaem --strict gash-p2.sh
+kaem --strict gash-p3.sh
+PATH=${REPO}/staging/bin:${REPO}/sources/mes-assets:${REPO}/guile_seed/bin
 
 ###########################
 # Phase-15 Build Mes libc #
 ###########################
 
 sh mes.sh
+ln -s ../../sources/mes-assets/mescc ../staging/bin/mescc
+PATH=${REPO}/staging/bin:${REPO}/guile_seed/bin
 GUILE_LOAD_PATH=${REPO}/sources/mes-assets/modules:${REPO}/sources/mes/modules:${REPO}/sources/nyacc/module:${GUILE_LOAD_PATH}
 
 #########################
