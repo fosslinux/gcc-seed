@@ -34,3 +34,6 @@
 [submodule "sources/tinycc-0.9.27"]
 	path = sources/tinycc-0.9.27
 	url = https://github.com/fosslinux/tinycc-0.9.27.git
+[submodule "sources/coreutils-5.0"]
+	path = sources/coreutils-5.0
+	url = https://github.com/fosslinux/coreutils-5.0.git

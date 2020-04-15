@@ -61,3 +61,12 @@ sh make-3.80.sh
 #############################
 
 sh bash-2.09b.sh
+
+################################
+# Phase-19 Build coreutils 5.0 #
+################################
+
+# Temporary use of gash-assets as otherwise install-sh fails multiple times
+PATH=${REPO}/sources/gash-assets:${REPO}/staging/bin:${REPO}/guile_seed/bin
+sh coreutils-5.0.sh
+PATH=${REPO}/staging/bin:${REPO}/guile_seed/bin
