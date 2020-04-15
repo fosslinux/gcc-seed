@@ -37,3 +37,6 @@
 [submodule "sources/coreutils-5.0"]
 	path = sources/coreutils-5.0
 	url = https://github.com/fosslinux/coreutils-5.0.git
+[submodule "sources/diffutils-2.7"]
+	path = sources/diffutils-2.7
+	url = https://github.com/fosslinux/diffutils-2.7.git

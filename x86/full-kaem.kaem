@@ -74,3 +74,9 @@ sh bash-2.09b.sh
 PATH=${REPO}/sources/gash-assets:${REPO}/staging/bin:${REPO}/guile_seed/bin
 sh coreutils-5.0.sh
 PATH=${REPO}/staging/bin:${REPO}/guile_seed/bin
+
+################################
+# Phase-20 Build diffutils 2.7 #
+################################
+
+sh diffutils-2.7.sh
