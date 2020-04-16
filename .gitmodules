@@ -40,3 +40,6 @@
 [submodule "sources/diffutils-2.7"]
 	path = sources/diffutils-2.7
 	url = https://github.com/fosslinux/diffutils-2.7.git
+[submodule "sources/sed-1.18"]
+	path = sources/sed-1.18
+	url = https://github.com/fosslinux/sed-1.18.git

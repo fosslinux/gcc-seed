@@ -80,3 +80,9 @@ PATH=${REPO}/staging/bin:${REPO}/guile_seed/bin
 ################################
 
 sh diffutils-2.7.sh
+
+###########################
+# Phase-21 Build sed 1.18 #
+###########################
+
+sh sed-1.18.sh
