@@ -2,6 +2,8 @@ set -e
 
 cd ${REPO}/staging/bin
 
+echo "Linking ls"
+ln -s ../../sources/gash-assets/ls .
 echo "Linking mkdir"
 ln -s ../../sources/gash-assets/mkdir .
 echo "Linking mv"

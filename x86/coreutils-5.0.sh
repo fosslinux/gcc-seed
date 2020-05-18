@@ -2,6 +2,8 @@
 
 set -ex
 
+export VERSION=${COREUTILS_TCC_VERSION}
+
 export CC="${REPO}/staging/bin/tcc"
 export CPP="${REPO}/staging/bin/tcc -E"
 export CPPFLAGS="-I${REPO}/staging/include"
@@ -14,9 +16,16 @@ export CONFIG_SHELL="${REPO}/staging/bin/sh"
 export RANLIB=""
 export YACC=""
 
-cd ${REPO}/sources/coreutils-5.0
+cd ${REPO}/sources
+tar -xf coreutils-${VERSION}.tar.gz
 
+cd ${REPO}/sources/coreutils-${VERSION}
 cp ${REPO}/staging/lib/crt*.o .
+
+rm src/dircolors.hin
+for p in ../patches/coreutils-${VERSION}/*.patch ; do
+    patch -Np0 -i ${p}
+done
 
 export INSTALL="${REPO}/staging/bin/sh $(pwd)/config/install-sh"
 
@@ -30,6 +39,7 @@ sh configure \
     --disable-doc \
     --disable-nls \
     --disable-rpath \
+    --disable-dependency-tracking \
     ac_cv_func_gethostbyname=no \
     gl_cv_func_rename_dest_works=yes
 

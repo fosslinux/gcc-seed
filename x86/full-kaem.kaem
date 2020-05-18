@@ -1,9 +1,15 @@
 #!/bin/sh
 
-set -ex
+set -e
 
-# XXX: SET ME!
-REPO=/home/samuel/projects/gcc-seed
+# Ask questions!
+echo "Hi! I need to ask you some questions so we can get this bootstrap going."
+echo ""
+echo "It looks like the path to the (root) for this bootstrap is:"
+pwd
+echo "without the /x86 on the end."
+echo "Please type in the full (absolute) path to the root for this bootstrap."
+read REPO
 
 PATH=${REPO}/staging/bin:${REPO}/sources/gash-assets:${REPO}/sources/mes-assets:${REPO}/guile_seed/bin
 LD_LIBRARY_PATH=${REPO}/staging/lib
@@ -42,8 +48,9 @@ PATH=${REPO}/staging/bin:${REPO}/sources/mes-assets:${REPO}/guile_seed/bin
 # Phase-15 Build Mes libc #
 ###########################
 
-sh mes.sh
-ln -s ../../sources/mes-assets/mescc ../staging/bin/mescc
+NYACC_VERSION=1.02.1
+MES_VERSION=0.22
+sh mes-${MES_VERSION}.sh
 PATH=${REPO}/staging/bin:${REPO}/guile_seed/bin
 GUILE_LOAD_PATH=${REPO}/sources/mes-assets/modules:${REPO}/sources/mes/modules:${REPO}/sources/nyacc/module:${GUILE_LOAD_PATH}
 
@@ -52,37 +59,50 @@ GUILE_LOAD_PATH=${REPO}/sources/mes-assets/modules:${REPO}/sources/mes/modules:$
 #########################
 
 sh tinycc-0.9.26.sh
-sh tinycc-0.9.27.sh
+TINYCC_VERSION=0.9.27
+sh tinycc-${TINYCC_VERSION}.sh
 
 ############################
-# Phase-17 Build Make 3.80 #
+# Phase-17 Build patch 2.5 #
 ############################
 
-sh make-3.80.sh
+PATCH_TCC_VERSION=2.5
+sh patch-${PATCH_TCC_VERSION}.sh
+
+############################
+# Phase-18 Build Make 3.80 #
+############################
+
+MAKE_TCC_VERSION=3.80
+sh make-${MAKE_TCC_VERSION}.sh
 
 #############################
-# Phase-18 Build bash 2.09b #
+# Phase-19 Build bash 2.05b #
 #############################
 
-sh bash-2.09b.sh
+BASH_TCC_VERSION=2.05b
+sh bash-2.05b.sh
 
 ################################
-# Phase-19 Build coreutils 5.0 #
+# Phase-20 Build coreutils 5.0 #
 ################################
 
 # Temporary use of gash-assets as otherwise install-sh fails multiple times
 PATH=${REPO}/sources/gash-assets:${REPO}/staging/bin:${REPO}/guile_seed/bin
+COREUTILS_TCC_VERSION=5.0
 sh coreutils-5.0.sh
 PATH=${REPO}/staging/bin:${REPO}/guile_seed/bin
 
 ################################
-# Phase-20 Build diffutils 2.7 #
+# Phase-21 Build diffutils 2.7 #
 ################################
 
+DIFFUTILS_TCC_VERSION=2.7
 sh diffutils-2.7.sh
 
 ###########################
-# Phase-21 Build sed 1.18 #
+# Phase-22 Build sed 1.18 #
 ###########################
 
+SED_TCC_VERSION=1.18
 sh sed-1.18.sh

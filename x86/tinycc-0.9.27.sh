@@ -2,14 +2,20 @@
 
 set -ex
 
+export VERSION=${TINYCC_VERSION}
+
 export CC=${REPO}/staging/bin/tcc
 export CPPFLAGS="-I${prefix}/include"
 export ARCH=x86
 export prefix=${REPO}/staging
 export interpreter=/lib/mes-loader-dummy
-export MES_PREFIX=${REPO}/sources/mes
+export MES_PREFIX=${REPO}/sources/mes-${MES_VERSION}
 
-cd ${REPO}/sources/tinycc-0.9.27 
+cd ${REPO}/sources
+tar -xf tcc-${VERSION}.tar.gz
+
+cd ${REPO}/sources/tcc-${VERSION}
+sed -i '/s->alacarte_link = 1/a s->static_link = 1;' libtcc.c
 
 sh configure \
     --cc="${CC}" \

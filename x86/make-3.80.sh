@@ -2,6 +2,8 @@
 
 set -ex
 
+export VERSION=${MAKE_TCC_VERSION}
+
 export CC="${REPO}/staging/bin/tcc"
 export CPP="${REPO}/staging/bin/tcc -E"
 export CPPFLAGS="-I${REPO}/staging/include"
@@ -19,8 +21,16 @@ export STRIP=""
 export RANLIB=""
 export XGETTEXT=""
 
-cd ${REPO}/sources/make-3.80
+cd ${REPO}/sources
+tar -xf make-${VERSION}.tar.gz
+
+cd ${REPO}/sources/make-${VERSION}
+mkdir -p tmp
 cp ${REPO}/staging/lib/crt*.o .
+
+for p in ../patches/make-${VERSION}/* ; do
+    patch -Np0 -i ${p}
+done
 
 sh configure \
     --prefix=${REPO}/staging \

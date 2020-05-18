@@ -7,39 +7,12 @@
 [submodule "sources/mes-m2"]
 	path = sources/mes-m2
 	url = https://github.com/oriansj/mes-m2.git
-[submodule "sources/nyacc"]
-	path = sources/nyacc
-	url = https://git.savannah.nongnu.org/git/nyacc.git
-[submodule "sources/tinycc"]
-	path = sources/tinycc-0.9.26
-	url = https://github.com/fosslinux/tinycc
 [submodule "sources/kaem"]
 	path = sources/kaem
 	url = https://github.com/oriansj/kaem
-[submodule "sources/make-3.80"]
-	path = sources/make-3.80
-	url = https://github.com/fosslinux/make-3.80
 [submodule "sources/gash"]
 	path = sources/gash
 	url = https://git.savannah.gnu.org/git/gash.git/
 [submodule "sources/gash-core-utils"]
 	path = sources/gash-core-utils
 	url = https://gitlab.com/janneke/gash
-[submodule "sources/bash-2.09b"]
-	path = sources/bash-2.09b
-	url = https://github.com/fosslinux/bash-2.09b
-[submodule "sources/mes"]
-	path = sources/mes
-	url = https://github.com/fosslinux/mes
-[submodule "sources/tinycc-0.9.27"]
-	path = sources/tinycc-0.9.27
-	url = https://github.com/fosslinux/tinycc-0.9.27.git
-[submodule "sources/coreutils-5.0"]
-	path = sources/coreutils-5.0
-	url = https://github.com/fosslinux/coreutils-5.0.git
-[submodule "sources/diffutils-2.7"]
-	path = sources/diffutils-2.7
-	url = https://github.com/fosslinux/diffutils-2.7.git
-[submodule "sources/sed-1.18"]
-	path = sources/sed-1.18
-	url = https://github.com/fosslinux/sed-1.18.git

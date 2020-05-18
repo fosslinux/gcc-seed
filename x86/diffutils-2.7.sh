@@ -2,6 +2,8 @@
 
 set -ex
 
+export VERSION=${DIFFUTILS_TCC_VERSION}
+
 export CC="${REPO}/staging/bin/tcc"
 export CPP="${REPO}/staging/bin/tcc -E"
 export CPPFLAGS="-I${REPO}/staging/include"
@@ -12,9 +14,15 @@ export SHELL="${REPO}/staging/bin/sh"
 export MAKE_SHELL="${REPO}/staging/bin/sh"
 export CONFIG_SHELL="${REPO}/staging/bin/sh"
 
-cd ${REPO}/sources/diffutils-2.7
+cd ${REPO}/sources
+tar -xf diffutils-${VERSION}.tar.gz
 
+cd ${REPO}/sources/diffutils-${VERSION}
 cp ${REPO}/staging/lib/crt*.o .
+
+for p in ../patches/diffutils-${VERSION}/*.patch ; do
+    patch -Np0 -i ${p}
+done
 
 export INSTALL="${REPO}/staging/bin/install"
 

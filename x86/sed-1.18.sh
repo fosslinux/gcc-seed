@@ -2,6 +2,8 @@
 
 set -ex
 
+export VERSION=${SED_TCC_VERSION}
+
 export CC="${REPO}/staging/bin/tcc"
 export CPP="${REPO}/staging/bin/tcc -E"
 export CPPFLAGS="-I${REPO}/staging/include"
@@ -16,9 +18,15 @@ export INSTALL="${REPO}/staging/bin/install"
 export extra_objs=""
 export DEFS="-D HAVE_BCOPY"
 
-cd ${REPO}/sources/sed-1.18
+cd ${REPO}/sources
+tar -xf sed-${SED_TCC_VERSION}.tar.gz
 
+cd ${REPO}/sources/sed-${SED_TCC_VERSION}
 cp ${REPO}/staging/lib/crt*.o .
+
+for p in ../patches/sed-${VERSION}/*.patch ; do
+    patch -Np0 -i ${p}
+done
 
 sh configure \
     --prefix=${REPO}/staging \

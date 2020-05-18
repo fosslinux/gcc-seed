@@ -83,5 +83,3 @@ echo "Linking head"
 ln -s ../../sources/gash-assets/head .
 echo "Linking ln"
 ln -s ../../sources/gash-assets/ln .
-echo "Linking ls"
-ln -s ../../sources/gash-assets/ls .
