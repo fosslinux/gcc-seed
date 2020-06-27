@@ -9,7 +9,8 @@ echo "It looks like the path to the (root) for this bootstrap is:"
 pwd
 echo "without the /x86 on the end."
 echo "Please type in the full (absolute) path to the root for this bootstrap."
-read REPO
+#read REPO
+REPO=/home/samuel/projects/gcc-seed
 
 PATH=${REPO}/staging/bin:${REPO}/sources/gash-assets:${REPO}/sources/mes-assets:${REPO}/guile_seed/bin
 LD_LIBRARY_PATH=${REPO}/staging/lib
@@ -23,9 +24,9 @@ USER=fakeuser
 LOGNAME=fakeuser
 USERNAME=fakeuser
 
-#######################################
-# Phase 10-12 Finish mescc-tools.kaem #
-#######################################
+########################################
+## Phase 10-12 Finish mescc-tools.kaem #
+########################################
 
 ../staging/bin/kaem --verbose --strict -f mescc-tools.full.kaem
 
@@ -83,8 +84,15 @@ sh make-${MAKE_TCC_VERSION}.sh
 BASH_TCC_VERSION=2.05b
 sh bash-2.05b.sh
 
+#############################
+# Phase-20 Build gzip 1.2.4 #
+#############################
+
+GZIP_TCC_VERSION=1.2.4
+sh gzip-1.2.4.sh
+
 ################################
-# Phase-20 Build coreutils 5.0 #
+# Phase-21 Build coreutils 5.0 #
 ################################
 
 # Temporary use of gash-assets as otherwise install-sh fails multiple times
@@ -94,14 +102,14 @@ sh coreutils-5.0.sh
 PATH=${REPO}/staging/bin:${REPO}/guile_seed/bin
 
 ################################
-# Phase-21 Build diffutils 2.7 #
+# Phase-22 Build diffutils 2.7 #
 ################################
 
 DIFFUTILS_TCC_VERSION=2.7
 sh diffutils-2.7.sh
 
 ###########################
-# Phase-22 Build sed 1.18 #
+# Phase-23 Build sed 1.18 #
 ###########################
 
 SED_TCC_VERSION=1.18

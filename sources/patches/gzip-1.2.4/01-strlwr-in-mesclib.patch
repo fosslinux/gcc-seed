@@ -1,0 +1,20 @@
+--- util.c.orig	2020-06-27 09:59:01.701333423 +1000
++++ util.c	2020-06-27 09:59:15.249383763 +1000
+@@ -163,17 +163,6 @@
+ }
+ 
+ /* ========================================================================
+- * Put string s in lower case, return s.
+- */
+-char *strlwr(s)
+-    char *s;
+-{
+-    char *t;
+-    for (t = s; *t; t++) *t = tolow(*t);
+-    return s;
+-}
+-
+-/* ========================================================================
+  * Return the base name of a file (remove any directory prefix and
+  * any version suffix). For systems with file names that are not
+  * case sensitive, force the base name to lower case.
