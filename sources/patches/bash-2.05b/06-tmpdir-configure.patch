@@ -1,0 +1,17 @@
+diff --git configure configure
+index 58b0a7f..3a57a1c 100755
+--- configure
++++ configure
+@@ -15760,11 +15765,7 @@ $debug ||
+ }
+ 
+ # Create a (secure) tmp directory for tmp files.
+-: ${TMPDIR=/tmp}
+-{
+-  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/csXXXXXX") 2>/dev/null` &&
+-  test -n "$tmp" && test -d "$tmp"
+-}  ||
++: ${TMPDIR=$(pwd)/tmp}
+ {
+   tmp=$TMPDIR/cs$$-$RANDOM
+   (umask 077 && mkdir $tmp)

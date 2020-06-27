@@ -1,0 +1,130 @@
+diff --git Makefile.in Makefile.in
+index 1225195..cb06cca 100644
+--- Makefile.in
++++ Makefile.in
+@@ -50,13 +50,14 @@ VPATH = .:@srcdir@
+ @SET_MAKE@
+ CC = @CC@
+ CC_FOR_BUILD = @CC_FOR_BUILD@
+-YACC = @YACC@
++YACC =
+ SHELL = @MAKE_SHELL@
+ CP = cp
+ RM = rm -f
+ AR = @AR@
+ ARFLAGS = @ARFLAGS@
+-RANLIB = @RANLIB@
++RANLIB =
++ECHO = $(REPO)/sources/gash-assets/echo
+ 
+ INSTALL = @INSTALL@
+ INSTALL_PROGRAM = @INSTALL_PROGRAM@
+@@ -96,8 +97,8 @@ VENDOR = @host_vendor@
+ MACHTYPE = @host@
+ 
+ # comment out for release
+-DEBUG = @DEBUG@
+-MALLOC_DEBUG = @MALLOC_DEBUG@
++#DEBUG = @DEBUG@
++#MALLOC_DEBUG = @MALLOC_DEBUG@
+ 
+ THIS_SH = $(BUILD_DIR)/$(Program)
+ 
+@@ -465,22 +466,21 @@ CREATED_MAKEFILES = Makefile builtins/Makefile doc/Makefile \
+ .NOEXPORT:
+ 
+ .made: $(Program) bashbug
+-	@echo "$(Program) last made for a $(Machine) running $(OS)" >.made
++	@$(ECHO) "$(Program) last made for a $(Machine) running $(OS)" >.made
+ 
+ $(Program):  .build $(OBJECTS) $(BUILTINS_DEP) $(LIBDEP)
+ 	$(RM) $@
+ 	$(PURIFY) $(CC) $(BUILTINS_LDFLAGS) $(LIBRARY_LDFLAGS) $(LDFLAGS) -o $(Program) $(OBJECTS) $(LIBS)
+ 	ls -l $(Program)
+-	size $(Program)
+ 
+ .build:	$(SOURCES) config.h Makefile version.h $(VERSPROG)
+-	@echo
+-	@echo "	  ***********************************************************"
+-	@echo "	  *                                                         *"
+-	@echo "	  * `$(BUILD_DIR)/$(VERSPROG) -l`"
+-	@echo "	  *                                                         *"
+-	@echo "	  ***********************************************************"
+-	@echo
++	@$(ECHO)
++	@$(ECHO) "	  ***********************************************************"
++	@$(ECHO) "	  *                                                         *"
++	@$(ECHO) "	  * `$(BUILD_DIR)/$(VERSPROG) -l`"
++	@$(ECHO) "	  *                                                         *"
++	@$(ECHO) "	  ***********************************************************"
++	@$(ECHO)
+ 
+ bashbug: $(SUPPORT_SRC)bashbug.sh config.h Makefile $(VERSPROG)
+ 	@sed -e "s%!MACHINE!%$(Machine)%" -e "s%!OS!%$(OS)%" \
+@@ -529,32 +529,32 @@ y.tab.c y.tab.h: parse.y
+ #	-if cmp -s old-y.tab.h y.tab.h; then mv old-y.tab.h y.tab.h; fi
+ 
+ $(READLINE_LIBRARY): config.h $(READLINE_SOURCE)
+-	@echo making $@ in ${RL_LIBDIR}
++	@$(ECHO) making $@ in ${RL_LIBDIR}
+ 	@( { test "${RL_LIBDIR}" = "${libdir}" && exit 0; } || \
+ 		cd ${RL_LIBDIR} && $(MAKE) $(MFLAGS) libreadline.a) || exit 1
+ 
+ $(HISTORY_LIBRARY): config.h $(HISTORY_SOURCE)
+-	@echo making $@ in ${HIST_LIBDIR}
++	@$(ECHO) making $@ in ${HIST_LIBDIR}
+ 	@( { test "${HIST_LIBDIR}" = "${libdir}" && exit 0; } || \
+ 		cd ${HIST_LIBDIR} && $(MAKE) $(MFLAGS) libhistory.a) || exit 1
+ 
+ $(GLOB_LIBRARY): config.h $(GLOB_SOURCE)
+-	@echo making $@ in ${GLOB_LIBDIR}
++	@$(ECHO) making $@ in ${GLOB_LIBDIR}
+ 	@(cd ${GLOB_LIBDIR} && \
+ 		$(MAKE) $(MFLAGS) DEBUG=${DEBUG} libglob.a) || exit 1
+ 
+ $(TILDE_LIBRARY): config.h $(TILDE_SOURCE)
+-	@echo making $@ in ${TILDE_LIBDIR}
++	@$(ECHO) making $@ in ${TILDE_LIBDIR}
+ 	@(cd ${TILDE_LIBDIR} && \
+ 		$(MAKE) $(MFLAGS) libtilde.a) || exit 1
+ 
+ $(TERMCAP_LIBRARY): config.h ${TERMCAP_SOURCE}
+-	@echo making $@ in ${TERM_LIBDIR}	
++	@$(ECHO) making $@ in ${TERM_LIBDIR}	
+ 	@(cd ${TERM_LIBDIR} && \
+ 		$(MAKE) $(MFLAGS) libtermcap.a) || exit 1
+ 
+ $(SHLIB_LIBRARY): config.h ${SHLIB_SOURCE}
+-	@echo making $@ in ${SH_LIBDIR}
++	@$(ECHO) making $@ in ${SH_LIBDIR}
+ 	@(cd ${SH_LIBDIR} && \
+ 		$(MAKE) $(MFLAGS) DEBUG=${DEBUG} ${SHLIB_LIBNAME}) || exit 1
+ 
+@@ -712,8 +712,8 @@ distclean:	basic-clean maybe-clean
+ 	$(RM) $(CREATED_SUPPORT) Makefile $(CREATED_MAKEFILES)
+ 
+ maintainer-clean:	basic-clean
+-	@echo This command is intended for maintainers to use.
+-	@echo It deletes files that may require special tools to rebuild.
++	@$(ECHO) This command is intended for maintainers to use.
++	@$(ECHO) It deletes files that may require special tools to rebuild.
+ 	$(RM) y.tab.c y.tab.h parser-built tags TAGS
+ 	( cd $(DOCDIR) && $(MAKE) $(MFLAGS) $@ )
+ 	( cd builtins && $(MAKE) $(MFLAGS) $@ )
+@@ -752,11 +752,11 @@ symlinks:
+ 	$(SHELL) $(SUPPORT_SRC)fixlinks -s $(srcdir)
+ 
+ dist:	force
+-	@echo Bash distributions are created using $(srcdir)/support/mkdist.
+-	@echo Here is a sample of the necessary commands:
+-	@echo $(Program) $(srcdir)/support/mkdist -m $(srcdir)/MANIFEST -s $(srcdir) -r ${Program} $(Version)-${RELSTATUS}
+-	@echo tar cf $(Program)-$(Version)-${RELSTATUS}.tar ${Program}-$(Version)-${RELSTATUS}
+-	@echo gzip $(Program)-$(Version)-${RELSTATUS}.tar
++	@$(ECHO) Bash distributions are created using $(srcdir)/support/mkdist.
++	@$(ECHO) Here is a sample of the necessary commands:
++	@$(ECHO) $(Program) $(srcdir)/support/mkdist -m $(srcdir)/MANIFEST -s $(srcdir) -r ${Program} $(Version)-${RELSTATUS}
++	@$(ECHO) tar cf $(Program)-$(Version)-${RELSTATUS}.tar ${Program}-$(Version)-${RELSTATUS}
++	@$(ECHO) gzip $(Program)-$(Version)-${RELSTATUS}.tar
+ 
+ depend:	depends
+ 

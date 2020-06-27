@@ -1,0 +1,15 @@
+diff --git Makefile.in Makefile.in
+index 18eaf84..1225195 100644
+--- Makefile.in
++++ Makefile.in
+@@ -611,8 +611,8 @@ config.status:	$(srcdir)/configure
+ 	$(SHELL) ./config.status --recheck
+ 
+ # comment out for distribution
+-$(srcdir)/configure:	$(srcdir)/configure.in $(srcdir)/aclocal.m4 $(srcdir)/config.h.in
+-	cd $(srcdir) && autoconf
++#$(srcdir)/configure:	$(srcdir)/configure.in $(srcdir)/aclocal.m4 $(srcdir)/config.h.in
++#	cd $(srcdir) && autoconf
+ 
+ # for chet
+ reconfig: force

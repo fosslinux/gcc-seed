@@ -1,0 +1,13 @@
+diff --git lib/Makefile.in lib/Makefile.in
+index 2edfc27..10f81f5 100644
+--- lib/Makefile.in
++++ lib/Makefile.in
+@@ -282,7 +282,7 @@ CONFIG_HEADER = $(top_builddir)/config.h
+ CONFIG_CLEAN_FILES =
+ LIBRARIES = $(noinst_LIBRARIES)
+ 
+-libfetish_a_AR = $(AR) cru
++libfetish_a_AR = ../../../staging/bin/tcc -ar cru
+ am_libfetish_a_OBJECTS = acl.$(OBJEXT) getdate.$(OBJEXT) \
+ 	posixtm.$(OBJEXT) posixver.$(OBJEXT) strftime.$(OBJEXT) \
+ 	getopt.$(OBJEXT) getopt1.$(OBJEXT) hash.$(OBJEXT) \

@@ -1,0 +1,12 @@
+diff --git configure configure
+index b24ef2a..0fc9706 100755
+--- configure
++++ configure
+@@ -2115,6 +2115,7 @@ do
+   echo '  cat > conftest.frag <<CEOF' >> $CONFIG_STATUS
+   sed ${ac_max_here_lines}q conftest.vals >> $CONFIG_STATUS
+   echo 'CEOF
++  chmod 644 conftest.in
+   sed -f conftest.frag conftest.in > conftest.out
+   rm -f conftest.in
+   mv conftest.out conftest.in

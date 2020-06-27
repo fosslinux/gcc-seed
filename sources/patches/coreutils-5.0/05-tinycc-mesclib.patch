@@ -1,0 +1,602 @@
+--- lib/fchown-stub.c
++++ lib/fchown-stub.c
+@@ -7,6 +7,8 @@
+    DJGPP 2.03 and earlier (and perhaps later) don't have `fchown',
+    so we pretend no-one has permission for this operation. */
+ 
++#define EPERM 1
++
+ int
+ fchown (int fd, uid_t uid, gid_t gid)
+ {
+
+--- lib/human.c
++++ lib/human.c
+@@ -84,6 +84,10 @@ char *getenv ();
+ /* The maximum length of a suffix like "KiB".  */
+ #define HUMAN_READABLE_SUFFIX_LENGTH_MAX 3
+ 
++#ifndef MB_LEN_MAX
++# define MB_LEN_MAX 1
++#endif
++
+ static const char power_letter[] =
+ {
+   0,	/* not used */
+
+--- lib/memcoll.c
++++ lib/memcoll.c
+@@ -47,7 +47,7 @@ memcoll (char *s1, size_t s1len, char *s2, size_t s2len)
+   s1[s1len++] = '\0';
+   s2[s2len++] = '\0';
+ 
+-  while (! (errno = 0, (diff = strcoll (s1, s2)) || errno))
++  while (! (errno = 0, (diff = strcmp (s1, s2)) || errno))
+     {
+       /* strcoll found no difference, but perhaps it was fooled by NUL
+ 	 characters in the data.  Work around this problem by advancing
+
+--- lib/modechange.h
++++ lib/modechange.h
+@@ -39,8 +39,8 @@ struct mode_change
+ {
+   char op;			/* One of "=+-". */
+   char flags;			/* Special operations. */
+-  mode_t affected;		/* Set for u/g/o/s/s/t, if to be affected. */
+-  mode_t value;			/* Bits to add/remove. */
++  int affected;		/* Set for u/g/o/s/s/t, if to be affected. */
++  int value;			/* Bits to add/remove. */
+   struct mode_change *next;	/* Link to next change in list. */
+ };
+ 
+@@ -65,7 +65,7 @@ struct mode_change
+ 
+ struct mode_change *mode_compile PARAMS ((const char *, unsigned));
+ struct mode_change *mode_create_from_ref PARAMS ((const char *));
+-mode_t mode_adjust PARAMS ((mode_t, const struct mode_change *));
++int mode_adjust PARAMS ((int, const struct mode_change *));
+ void mode_free PARAMS ((struct mode_change *));
+ 
+ #endif
+
+--- src/chown-core.c
++++ src/chown-core.c
+@@ -22,6 +22,9 @@
+ #include <sys/types.h>
+ #include <pwd.h>
+ #include <grp.h>
++/* #include <fctnl.h> - we don't have this in Mes C lib */
++#define O_NONBLOCK 00004
++#define O_NOCTTY   00400
+ 
+ #include "system.h"
+ #include "error.h"
+
+--- src/copy.c
++++ src/copy.c
+@@ -46,6 +46,12 @@
+ #include "same.h"
+ #include "xreadlink.h"
+ 
++#define EPERM 1
++
++#ifndef ENOTEMPTY
++# define ENOTEMPTY 0
++#endif
++
+ #define DO_CHOWN(Chown, File, New_uid, New_gid)				\
+   (Chown (File, New_uid, New_gid)					\
+    /* If non-root uses -p, it's ok if we can't preserve ownership.	\
+
+--- src/cp.c
++++ src/cp.c
+@@ -37,6 +37,8 @@
+ #include "path-concat.h"
+ #include "quote.h"
+ 
++#define EPERM 1
++
+ #define ASSIGN_BASENAME_STRDUPA(Dest, File_name)	\
+   do							\
+     {							\
+
+--- src/date.c
++++ src/date.c
+@@ -463,7 +463,8 @@ argument must be a format string beginning with `+'."),
+ 	{
+ 	  /* Set the system clock to the specified date, then regardless of
+ 	     the success of that operation, format and print that date.  */
+-	  if (settime (&when) != 0)
++		/* We can't set time with Mes C Library. */
++	  if (true)
+ 	    {
+ 	      error (0, errno, _("cannot set date"));
+ 	      status = 1;
+
+--- src/dd.c
++++ src/dd.c
+@@ -751,44 +751,11 @@ swab_buffer (char *buf, size_t *nread)
+    The offending behavior has been confirmed with an Exabyte SCSI tape
+    drive accessed via /dev/nst0 on both Linux-2.2.17 and Linux-2.4.16.  */
+ 
+-#ifdef __linux__
++/* We don't actually care about tape drives for the bootstrap, and the
++ * code that should be below dosen't work.
++ * Also TinyCC preprocessor dosen't like the code either. So delete it. */
+ 
+-# include <sys/mtio.h>
+-
+-# define MT_SAME_POSITION(P, Q) \
+-   ((P).mt_resid == (Q).mt_resid \
+-    && (P).mt_fileno == (Q).mt_fileno \
+-    && (P).mt_blkno == (Q).mt_blkno)
+-
+-static off_t
+-skip_via_lseek (char const *filename, int fdesc, off_t offset, int whence)
+-{
+-  struct mtget s1;
+-  struct mtget s2;
+-  off_t new_position;
+-  int got_original_tape_position;
+-
+-  got_original_tape_position = (ioctl (fdesc, MTIOCGET, &s1) == 0);
+-  /* known bad device type */
+-  /* && s.mt_type == MT_ISSCSI2 */
+-
+-  new_position = lseek (fdesc, offset, whence);
+-  if (0 <= new_position
+-      && got_original_tape_position
+-      && ioctl (fdesc, MTIOCGET, &s2) == 0
+-      && MT_SAME_POSITION (s1, s2))
+-    {
+-      error (0, 0, _("warning: working around lseek kernel bug for file (%s)\n\
+-  of mt_type=0x%0lx -- see <sys/mtio.h> for the list of types"),
+-	     filename, s2.mt_type);
+-      new_position = -1;
+-    }
+-
+-  return new_position;
+-}
+-#else
+-# define skip_via_lseek(Filename, Fd, Offset, Whence) lseek (Fd, Offset, Whence)
+-#endif
++#define skip_via_lseek(Filename, Fd, Offset, Whence) lseek (Fd, Offset, Whence)
+ 
+ /* Throw away RECORDS blocks of BLOCKSIZE bytes on file descriptor FDESC,
+    which is open with read permission for FILE.  Store up to BLOCKSIZE
+
+--- src/du.c
++++ src/du.c
+@@ -42,6 +42,10 @@
+ #include "same.h"
+ #include "xstrtol.h"
+ 
++#ifndef MB_LEN_MAX
++# define MB_LEN_MAX 1
++#endif
++
+ /* The official name of this program (e.g., no `g' prefix).  */
+ #define PROGRAM_NAME "du"
+ 
+@@ -183,7 +187,6 @@ Mandatory arguments to long options are mandatory for short options too.\n\
+   -a, --all             write counts for all files, not just directories\n\
+       --apparent-size   print apparent sizes, rather than disk usage; although\n\
+                           the apparent size is usually smaller, it may be\n\
+-                          larger due to holes in (`sparse') files, internal\n\
+                           fragmentation, indirect blocks, and the like\n\
+   -B, --block-size=SIZE use SIZE-byte blocks\n\
+   -b, --bytes           equivalent to `--apparent-size --block-size=1'\n\
+
+--- src/expr.c
++++ src/expr.c
+@@ -332,7 +332,7 @@ nextarg (char *str)
+     return 0;
+   else
+     {
+-      int r = strcoll (*args, str) == 0;
++      int r = strcmp (*args, str) == 0;
+       args += r;
+       return r;
+     }
+@@ -494,7 +494,7 @@ eval6 (void)
+       r = eval6 ();
+       tostring (l);
+       tostring (r);
+-      v = int_value (strcspn (l->u.s, r->u.s) + 1);
++      v = int_value (strlen(l->u.s) - strlen(r->u.s) + 1);
+       if (v->u.i == strlen (l->u.s) + 1)
+ 	v->u.i = 0;
+       freev (l);
+@@ -668,7 +668,7 @@ eval2 (void)
+       r = eval3 ();
+       tostring (l);
+       tostring (r);
+-      lval = strcoll (l->u.s, r->u.s);
++      lval = strcmp (l->u.s, r->u.s);
+       rval = 0;
+       if (toarith (l) && toarith (r))
+ 	{
+
+--- src/ls.c
++++ src/ls.c
+@@ -68,6 +68,9 @@
+ #if HAVE_STDLIB_H
+ # include <stdlib.h>
+ #endif
++#ifndef MB_LEN_MAX
++# define MB_LEN_MAX 1
++#endif
+ 
+ /* Get mbstate_t, mbrtowc(), mbsinit(), wcwidth().  */
+ #if HAVE_WCHAR_H
+@@ -1705,7 +1708,7 @@ decode_switches (int argc, char **argv)
+ 
+       while (strncmp (style, posix_prefix, sizeof posix_prefix - 1) == 0)
+ 	{
+-	  if (! hard_locale (LC_TIME))
++	  if (! hard_locale ("C"))
+ 	    return optind;
+ 	  style += sizeof posix_prefix - 1;
+ 	}
+@@ -1746,7 +1749,7 @@ decode_switches (int argc, char **argv)
+ 	    break;
+ 
+ 	  case locale_time_style:
+-	    if (hard_locale (LC_TIME))
++	    if (hard_locale ("C"))
+ 	      {
+ 		unsigned int i;
+ 		for (i = 0; i < 2; i++)
+@@ -2597,7 +2600,7 @@ xstrcoll (char const *a, char const *b)
+ {
+   int diff;
+   errno = 0;
+-  diff = strcoll (a, b);
++  diff = strcmp (a, b);
+   if (errno)
+     {
+       error (0, errno, _("cannot compare file names %s and %s"),
+
+--- src/remove.c
++++ src/remove.c
+@@ -40,6 +40,12 @@
+ #include "quote.h"
+ #include "remove.h"
+ 
++#define EPERM 1
++
++#ifndef ENOTEMPTY
++# define ENOTEMPTY 0
++#endif
++
+ /* Avoid shadowing warnings because these are functions declared
+    in dirname.h as well as locals used below.  */
+ #define dir_name rm_dir_name
+
+--- src/shred.c
++++ src/shred.c
+@@ -115,6 +115,11 @@
+ # define O_NOCTTY 0  /* This is a very optional frill */
+ #endif
+ 
++#define O_NONBLOCK 00004
++#ifndef MB_LEN_MAX
++# define MB_LEN_MAX 1
++#endif
++
+ #define DEFAULT_PASSES 25	/* Default */
+ 
+ /* How many seconds to wait before checking whether to output another
+@@ -222,9 +227,7 @@ to be recovered later.\n\
+   exit (status);
+ }
+ 
+-#if ! HAVE_FDATASYNC
+-# define fdatasync(fd) -1
+-#endif
++#define fdatasync(fd) -1
+ 
+ /*
+  * --------------------------------------------------------------------
+@@ -612,7 +615,9 @@ isaac_seed (struct isaac_state *s)
+     hrtime_t t = gethrtime ();
+     ISAAC_SEED (s, t);
+ #else
+-# if HAVE_CLOCK_GETTIME		/* POSIX ns-resolution */
++/* Mes C Library does not have CLOCK_REALTIME. Who cares, we are just
++ * getting seed material. */
++# if 0		/* POSIX ns-resolution */
+     struct timespec t;
+     clock_gettime (CLOCK_REALTIME, &t);
+ # else
+@@ -1397,9 +1402,6 @@ wipename (char *oldname, char const *qoldname, struct Options const *flags)
+ 	    {
+ 	      if (rename (oldname, newname) == 0)
+ 		{
+-		  if (dir_fd < 0
+-		      || (fdatasync (dir_fd) < 0 && fsync (dir_fd) < 0))
+-		    sync ();	/* Force directory out */
+ 		  if (flags->verbose)
+ 		    {
+ 		      /*
+@@ -1431,8 +1433,6 @@ wipename (char *oldname, char const *qoldname, struct Options const *flags)
+     }
+   free (newname);
+   err = unlink (oldname);
+-  if (dir_fd < 0 || (fdatasync (dir_fd) < 0 && fsync (dir_fd) < 0))
+-    sync ();
+   close (dir_fd);
+   if (!err && flags->verbose)
+     error (0, 0, _("%s: removed"), qoldname);
+
+--- src/sort.c
++++ src/sort.c
+@@ -2185,7 +2185,8 @@ main (int argc, char **argv)
+   hard_LC_TIME = hard_locale (LC_TIME);
+ #endif
+ 
+-#if HAVE_SETLOCALE
++/* Broken under tinycc */
++#if 0 
+   /* Let's get locale's representation of the decimal point */
+   {
+     struct lconv *lconvp = localeconv ();
+
+--- src/stat.c
++++ src/stat.c
+@@ -109,7 +109,7 @@ char *program_name;
+    Others have statfs.f_fstypename[MFSNAMELEN]. (NetBSD 1.5.2)
+    Still others have neither and have to get by with f_type (Linux).  */
+ static char *
+-human_fstype (STRUCT_STATVFS const *statfsbuf)
++human_fstype (const struct statvfs *statfsbuf)
+ {
+ #ifdef STATXFS_FILE_SYSTEM_TYPE_MEMBER_NAME
+   /* Cast away the `const' attribute.  */
+
+--- src/sum.c
++++ src/sum.c
+@@ -30,6 +30,10 @@
+ #include "human.h"
+ #include "safe-read.h"
+ 
++#ifndef MB_LEN_MAX
++# define MB_LEN_MAX 1
++#endif
++
+ /* The official name of this program (e.g., no `g' prefix).  */
+ #define PROGRAM_NAME "sum"
+
+--- src/sys2.h
++++ src/sys2.h
+@@ -22,6 +22,9 @@
+ # undef S_ISSOCK
+ #endif
+ 
++/* limits */
++#include <limits.h>
++#define CHAR_MIN -127
+ 
+ #ifndef S_ISBLK
+ # ifdef S_IFBLK
+
+--- src/tail.c
++++ src/tail.c
+@@ -42,6 +42,10 @@
+ #include "xstrtol.h"
+ #include "xstrtod.h"
+ 
++#ifndef EPERM
++# define EPERM 1
++#endif
++
+ /* The official name of this program (e.g., no `g' prefix).  */
+ #define PROGRAM_NAME "tail"
+ 
+--- src/touch.c
++++ src/touch.c
+@@ -62,6 +62,10 @@ time_t time ();
+ # define EISDIR 0
+ #endif
+ 
++#ifndef EPERM
++# define EPERM 1
++#endif
++
+ /* The name by which this program was run. */
+ char *program_name;
+ 
+--- lib/fnmatch.c	2002-06-26 16:17:35.000000000 +1000
++++ lib/fnmatch.c	2020-04-30 20:06:22.787548638 +1000
+@@ -225,7 +225,7 @@
+ #  endif
+ # endif
+ # define MEMCHR(S, C, N) memchr (S, C, N)
+-# define STRCOLL(S1, S2) strcoll (S1, S2)
++# define STRCOLL(S1, S2) strcmp (S1, S2)
+ # include "fnmatch_loop.c"
+ 
+
+--- configure	2020-05-03 10:21:44.756833496 +1000
++++ configure	2020-05-03 10:21:23.392770833 +1000
+@@ -27716,7 +27716,7 @@
+ 
+ 
+ cat >>confdefs.h <<_ACEOF
+-#define UTILS_OPEN_MAX $utils_cv_sys_open_max
++#define UTILS_OPEN_MAX 4096 
+ _ACEOF
+ 
+ 
+ 
+--- src/dd.c	2020-05-03 10:21:44.760833508 +1000
++++ src/dd.c	2020-05-03 10:21:29.112787610 +1000
+@@ -23,6 +23,7 @@
+ #define SWAB_ALIGN_OFFSET 2
+ 
+ #include <sys/types.h>
++#include <sys/user.h>
+ #include <signal.h>
+ #include <getopt.h>
+ 
+@@ -896,7 +897,7 @@
+   char *real_obuf;
+   size_t nread;			/* Bytes read in the current block. */
+   int exit_status = 0;
+-  size_t page_size = getpagesize ();
++  size_t page_size = NBPG;
+   size_t n_bytes_read;
+ 
+   /* Leave at least one extra byte at the beginning and end of `ibuf'
+
+--- src/Makefile.in	2020-05-03 12:26:19.361727106 +1000
++++ src/Makefile.in	2020-05-03 12:26:06.473683112 +1000
+@@ -161,7 +161,7 @@
+ bin_SCRIPTS = groups @OPTIONAL_BIN_ZCRIPTS@
+ bin_PROGRAMS = chgrp chown chmod cp dd dircolors du \
+   ginstall link ln dir vdir mkdir \
+-  mkfifo mknod mv readlink rm rmdir shred stat sync touch unlink \
++  mkfifo mknod mv readlink rm rmdir shred sync touch unlink \
+   cat cksum comm csplit cut expand fmt fold head join md5sum \
+   nl od paste pr ptx sha1sum sort split sum tac tail tr tsort unexpand uniq wc \
+   basename date dirname echo env expr factor false \
+@@ -296,7 +296,7 @@
+ 	link$(EXEEXT) ln$(EXEEXT) dir$(EXEEXT) vdir$(EXEEXT) \
+ 	mkdir$(EXEEXT) mkfifo$(EXEEXT) mknod$(EXEEXT) \
+ 	mv$(EXEEXT) readlink$(EXEEXT) rm$(EXEEXT) rmdir$(EXEEXT) \
+-	shred$(EXEEXT) stat$(EXEEXT) sync$(EXEEXT) touch$(EXEEXT) \
++	shred$(EXEEXT) sync$(EXEEXT) touch$(EXEEXT) \
+ 	unlink$(EXEEXT) cat$(EXEEXT) cksum$(EXEEXT) comm$(EXEEXT) \
+ 	csplit$(EXEEXT) cut$(EXEEXT) expand$(EXEEXT) fmt$(EXEEXT) \
+ 	fold$(EXEEXT) head$(EXEEXT) join$(EXEEXT) md5sum$(EXEEXT) \
+@@ -800,14 +800,14 @@
+ 	mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c \
+ 	pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c \
+ 	readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) \
+-	shred.c sleep.c sort.c split.c stat.c stty.c su.c sum.c sync.c \
++	shred.c sleep.c sort.c split.c stty.c su.c sum.c sync.c \
+ 	tac.c tail.c tee.c test.c touch.c tr.c true.c tsort.c tty.c \
+ 	uname.c unexpand.c uniq.c unlink.c uptime.c users.c \
+ 	$(vdir_SOURCES) wc.c who.c whoami.c yes.c
+ HEADERS = $(noinst_HEADERS)
+ 
+ DIST_COMMON = $(noinst_HEADERS) Makefile.am Makefile.in
+-SOURCES = basename.c cat.c $(chgrp_SOURCES) chmod.c $(chown_SOURCES) chroot.c cksum.c comm.c $(cp_SOURCES) csplit.c cut.c date.c dd.c df.c $(dir_SOURCES) dircolors.c dirname.c du.c echo.c env.c expand.c expr.c factor.c false.c fmt.c fold.c $(ginstall_SOURCES) head.c hostid.c hostname.c id.c join.c kill.c link.c ln.c logname.c $(md5sum_SOURCES) mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) shred.c sleep.c sort.c split.c stat.c stty.c su.c sum.c sync.c tac.c tail.c tee.c test.c touch.c tr.c true.c tsort.c tty.c uname.c unexpand.c uniq.c unlink.c uptime.c users.c $(vdir_SOURCES) wc.c who.c whoami.c yes.c
++SOURCES = basename.c cat.c $(chgrp_SOURCES) chmod.c $(chown_SOURCES) chroot.c cksum.c comm.c $(cp_SOURCES) csplit.c cut.c date.c dd.c df.c $(dir_SOURCES) dircolors.c dirname.c du.c echo.c env.c expand.c expr.c factor.c false.c fmt.c fold.c $(ginstall_SOURCES) head.c hostid.c hostname.c id.c join.c kill.c link.c ln.c logname.c $(md5sum_SOURCES) mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) shred.c sleep.c sort.c split.c stty.c su.c sum.c sync.c tac.c tail.c tee.c test.c touch.c tr.c true.c tsort.c tty.c uname.c unexpand.c uniq.c unlink.c uptime.c users.c $(vdir_SOURCES) wc.c who.c whoami.c yes.c
+ 
+ all: $(BUILT_SOURCES)
+ 	$(MAKE) $(AM_MAKEFLAGS) all-am
+
+--- src/Makefile.in	2020-05-03 13:16:45.911892867 +1000
++++ src/Makefile.in	2020-05-03 13:16:39.103869951 +1000
+@@ -155,13 +155,13 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ 
+-EXTRA_PROGRAMS = chroot df hostid nice pinky stty su uname uptime users who
++EXTRA_PROGRAMS = chroot df hostid nice pinky stty uname uptime users who
+ EXTRA_SCRIPTS = nohup
+ 
+ bin_SCRIPTS = groups @OPTIONAL_BIN_ZCRIPTS@
+ bin_PROGRAMS = chgrp chown chmod cp dd dircolors du \
+   ginstall link ln dir vdir mkdir \
+-  mkfifo mknod mv readlink rm rmdir shred sync touch unlink \
++  mkfifo mknod mv readlink rm rmdir shred touch unlink \
+   cat cksum comm csplit cut expand fmt fold head join md5sum \
+   nl od paste pr ptx sha1sum sort split sum tac tail tr tsort unexpand uniq wc \
+   basename date dirname echo env expr factor false \
+@@ -180,7 +180,7 @@
+ EXTRA_DIST = tac-pipe.c \
+   groups.sh nohup.sh wheel-gen.pl
+ 
+-CLEANFILES = $(SCRIPTS) su
++CLEANFILES = $(SCRIPTS)
+ 
+ INCLUDES = -I.. -I$(srcdir) -I$(top_srcdir)/lib -I../lib
+ 
+@@ -230,15 +230,6 @@
+ 
+ setuid_root_mode = a=rx,u+s
+ 
+-INSTALL_SU = \
+-  p=su; \
+-  echo " $(INSTALL_PROGRAM) $$p $(installed_su)"; \
+-  $(INSTALL_PROGRAM) $$p $(installed_su); \
+-  echo " chown root $(installed_su)"; \
+-  chown root $(installed_su); \
+-  echo " chmod $(setuid_root_mode) $(installed_su)"; \
+-  chmod $(setuid_root_mode) $(installed_su)
+-
+ ginstall_SOURCES = install.c copy.c cp-hash.c
+ 
+ cp_SOURCES = cp.c copy.c cp-hash.c
+@@ -289,14 +280,14 @@
+ CONFIG_HEADER = $(top_builddir)/config.h
+ CONFIG_CLEAN_FILES =
+ EXTRA_PROGRAMS = chroot$(EXEEXT) df$(EXEEXT) hostid$(EXEEXT) \
+-	nice$(EXEEXT) pinky$(EXEEXT) stty$(EXEEXT) su$(EXEEXT) \
++	nice$(EXEEXT) pinky$(EXEEXT) stty$(EXEEXT) \
+ 	uname$(EXEEXT) uptime$(EXEEXT) users$(EXEEXT) who$(EXEEXT)
+ bin_PROGRAMS = chgrp$(EXEEXT) chown$(EXEEXT) chmod$(EXEEXT) cp$(EXEEXT) \
+ 	dd$(EXEEXT) dircolors$(EXEEXT) du$(EXEEXT) ginstall$(EXEEXT) \
+ 	link$(EXEEXT) ln$(EXEEXT) dir$(EXEEXT) vdir$(EXEEXT) \
+ 	mkdir$(EXEEXT) mkfifo$(EXEEXT) mknod$(EXEEXT) \
+ 	mv$(EXEEXT) readlink$(EXEEXT) rm$(EXEEXT) rmdir$(EXEEXT) \
+-	shred$(EXEEXT) sync$(EXEEXT) touch$(EXEEXT) \
++	shred$(EXEEXT) touch$(EXEEXT) \
+ 	unlink$(EXEEXT) cat$(EXEEXT) cksum$(EXEEXT) comm$(EXEEXT) \
+ 	csplit$(EXEEXT) cut$(EXEEXT) expand$(EXEEXT) fmt$(EXEEXT) \
+ 	fold$(EXEEXT) head$(EXEEXT) join$(EXEEXT) md5sum$(EXEEXT) \
+@@ -800,14 +791,14 @@
+ 	mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c \
+ 	pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c \
+ 	readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) \
+-	shred.c sleep.c sort.c split.c stty.c su.c sum.c sync.c \
++	shred.c sleep.c sort.c split.c stty.c sum.c \
+ 	tac.c tail.c tee.c test.c touch.c tr.c true.c tsort.c tty.c \
+ 	uname.c unexpand.c uniq.c unlink.c uptime.c users.c \
+ 	$(vdir_SOURCES) wc.c who.c whoami.c yes.c
+ HEADERS = $(noinst_HEADERS)
+ 
+ DIST_COMMON = $(noinst_HEADERS) Makefile.am Makefile.in
+-SOURCES = basename.c cat.c $(chgrp_SOURCES) chmod.c $(chown_SOURCES) chroot.c cksum.c comm.c $(cp_SOURCES) csplit.c cut.c date.c dd.c df.c $(dir_SOURCES) dircolors.c dirname.c du.c echo.c env.c expand.c expr.c factor.c false.c fmt.c fold.c $(ginstall_SOURCES) head.c hostid.c hostname.c id.c join.c kill.c link.c ln.c logname.c $(md5sum_SOURCES) mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) shred.c sleep.c sort.c split.c stty.c su.c sum.c sync.c tac.c tail.c tee.c test.c touch.c tr.c true.c tsort.c tty.c uname.c unexpand.c uniq.c unlink.c uptime.c users.c $(vdir_SOURCES) wc.c who.c whoami.c yes.c
++SOURCES = basename.c cat.c $(chgrp_SOURCES) chmod.c $(chown_SOURCES) chroot.c cksum.c comm.c $(cp_SOURCES) csplit.c cut.c date.c dd.c df.c $(dir_SOURCES) dircolors.c dirname.c du.c echo.c env.c expand.c expr.c factor.c false.c fmt.c fold.c $(ginstall_SOURCES) head.c hostid.c hostname.c id.c join.c kill.c link.c ln.c logname.c $(md5sum_SOURCES) mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) shred.c sleep.c sort.c split.c stty.c sum.c tac.c tail.c tee.c test.c touch.c tr.c true.c tsort.c tty.c uname.c unexpand.c uniq.c unlink.c uptime.c users.c $(vdir_SOURCES) wc.c who.c whoami.c yes.c
+ 
+ all: $(BUILT_SOURCES)
+ 	$(MAKE) $(AM_MAKEFLAGS) all-am
+@@ -1476,33 +1467,7 @@
+ 	chmod +x $@-t
+ 	mv $@-t $@
+ 
+-all-local: su$(EXEEXT)
+-
+-install-root: su$(EXEEXT)
+-	@$(INSTALL_SU)
+-
+-install-exec-local: su$(EXEEXT)
+-	@TMPFILE=$(DESTDIR)$(bindir)/.su-$$$$; \
+-	rm -f $$TMPFILE; \
+-	echo > $$TMPFILE; \
+-	can_create_suid_root_executable=no; \
+-	chown root $$TMPFILE > /dev/null 2>&1 \
+-	  && chmod $(setuid_root_mode) $$TMPFILE > /dev/null 2>&1 \
+-	  && can_create_suid_root_executable=yes; \
+-	rm -f $$TMPFILE; \
+-	if test $$can_create_suid_root_executable = yes; then \
+-	  $(INSTALL_SU); \
+-	else \
+-	  echo "WARNING: insufficient access; not installing su"; \
+-	  echo "NOTE: to install su, run 'make install-root' as root"; \
+-	fi
+-
+-uninstall-local:
+-# Remove su only if it's one we installed.
+-	@if grep '@GNU_PACKAGE@' $(installed_su) > /dev/null 2>&1; then \
+-	  echo "  rm -f $(installed_su)"; \
+-	  rm -f $(installed_su); \
+-	else :; fi
++all-local:
+ 
+ dircolors.h: dircolors.hin
+ 	$(PERL) -w -- $(srcdir)/dcgen $(srcdir)/dircolors.hin > $@-t
+

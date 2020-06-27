@@ -1,0 +1,13 @@
+diff --git make.h make.h
+index 6648ea0..5fb690f 100644
+--- make.h
++++ make.h
+@@ -468,7 +468,7 @@ extern void child_access PARAMS ((void));
+ 
+ extern long int atol ();
+ # ifndef VMS
+-extern long int lseek ();
++// extern long int lseek ();
+ # endif
+ 
+ #endif  /* Not GNU C library or POSIX.  */

@@ -1,0 +1,26 @@
+--- config.h.in	2002-06-25 23:48:52.000000000 +1000
++++ config.h.in	2020-04-28 17:14:49.417164689 +1000
+@@ -875,4 +875,9 @@
+ 
+ #include "config-bot.h"
+ 
++#define enable_hostname_completion(on_or_off) 0
++
++#define HAVE_POSIX_SIGNALS 1
++#define endpwent(x) 0
++
+ #endif /* _CONFIG_H_ */
+
+diff --git lib/sh/snprintf.c lib/sh/snprintf.c
+index 7669576..747aeba 100644
+--- lib/sh/snprintf.c
++++ lib/sh/snprintf.c
+@@ -376,7 +376,7 @@ static void xfree __P((void *));
+ 	    if ((p)->flags & PF_STAR_P) \
+ 	      (p)->precision = GETARG (int)
+ 
+-#if defined (HAVE_LOCALE_H)
++#if 0
+ #  define GETLOCALEDATA(d, t, g) \
+       do \
+ 	{ \

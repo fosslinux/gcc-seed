@@ -1,0 +1,44 @@
+diff --git doc/Makefile.in doc/Makefile.in
+index 39a6240..a166cf7 100644
+--- doc/Makefile.in
++++ doc/Makefile.in
+@@ -84,15 +84,8 @@ LTLIBICONV = @LTLIBICONV@
+ LTLIBINTL = @LTLIBINTL@
+ LTLIBOBJS = @LTLIBOBJS@
+ 
+-# The following is necessary if the package name is 8 characters or longer.
+-# If the info documentation would be split into 10 or more separate files,
+-# then this is necessary even if the package name is 7 characters long.
+-#
+-# Tell makeinfo to put everything in a single info file: <package>.info.
+-# Otherwise, it would also generate files with names like <package>.info-[123],
+-# and those names all map to one 14-byte name (<package>.info-) on some crufty
+-# old systems.
+-MAKEINFO = makeinfo --no-split
++# We do not have makeinfo
++MAKEINFO =
+ MAN = @MAN@
+ MKINSTALLDIRS = @MKINSTALLDIRS@
+ MSGFMT = @MSGFMT@
+@@ -186,18 +179,13 @@ Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+ 
+ .texi.info:
+ 	@rm -f $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]
+-	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
+-	 -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
++	# NOP because we don't have makeinfo
+ 
+ .texi.dvi:
+-	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
+-	MAKEINFO='$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir)' \
+-	$(TEXI2DVI) `test -f '$<' || echo '$(srcdir)/'`$<
++	# NOP, no makeinfo
+ 
+ .texi.pdf:
+-	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
+-	MAKEINFO='$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir)' \
+-	$(TEXI2PDF) `test -f '$<' || echo '$(srcdir)/'`$<
++	# NOP no makeinfo
+ coreutils.info: coreutils.texi version.texi
+ coreutils.dvi: coreutils.texi version.texi
+ coreutils.pdf: coreutils.texi version.texi

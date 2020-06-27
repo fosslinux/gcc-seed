@@ -1,0 +1,60 @@
+--- Makefile.in	2020-04-27 15:30:41.110138194 +1000
++++ Makefile.in	2020-04-27 15:32:33.070633457 +1000
+@@ -568,7 +568,7 @@
+ # *not* cross-compiling
+ lsignames.h:   mksignames$(EXEEXT)
+ 	$(RM) $@
+-	./mksignames $@
++	../gash-assets/gash -c "./mksignames $@"
+ 
+ # copy the correct signames header file to signames.h
+ signames.h: $(SIGNAMES_H)
+
+--- builtins/Makefile.in	2002-04-23 23:24:23.000000000 +1000
++++ builtins/Makefile.in	2020-04-27 15:34:04.015035484 +1000
+@@ -91,14 +91,14 @@
+ # How to make a .o file from a .def file.
+ .def.o:
+ 	$(RM) $@
+-	./$(MKBUILTINS) $(DIRECTDEFINE) $<
++	../../gash-assets/gash -c "./$(MKBUILTINS) $(DIRECTDEFINE) $<"
+ 	$(CC) -c $(CCFLAGS) $*.c || ( $(RM) $*.c ; exit 1 )
+ 	$(RM) $*.c
+ 
+ # How to make a .c file from a .def file.
+ .def.c:
+ 	$(RM) $@
+-	./$(MKBUILTINS) $(DIRECTDEFINE) $<
++	../../gash-assets/gash -c "./$(MKBUILTINS) $(DIRECTDEFINE) $<"
+ 
+ # default rule for making a .o file from a .c file
+ .c.o:
+@@ -144,8 +144,7 @@
+ builtext.h builtins.c: $(MKBUILTINS) $(DEFSRC)
+ 	@-if test -f builtins.c; then mv -f builtins.c old-builtins.c; fi
+ 	@-if test -f builtext.h; then mv -f builtext.h old-builtext.h; fi
+-	./$(MKBUILTINS) -externfile builtext.h -structfile builtins.c \
+-	    -noproduction $(DIRECTDEFINE) $(HELPDIRDEFINE) $(DEFSRC)
++	../../gash-assets/gash -c "./$(MKBUILTINS) -externfile builtext.h -structfile builtins.c -noproduction $(DIRECTDEFINE) $(HELPDIRDEFINE) $(DEFSRC)"
+ 	@-if cmp -s old-builtext.h builtext.h 2>/dev/null; then \
+ 		mv old-builtext.h builtext.h; \
+ 	 else \
+@@ -158,7 +157,7 @@
+ 	 fi
+ 
+ helpdoc:	$(MKBUILTINS) $(DEFSRC)
+-	./$(MKBUILTINS) ${HELPDIRDEFINE} -noproduction $(DIRECTDEFINE) $(DEFSRC)
++	../../gash-assets/gash -c "./$(MKBUILTINS) ${HELPDIRDEFINE} -noproduction $(DIRECTDEFINE) $(DEFSRC)"
+ 
+ install-help:
+ 	@-if test -n "${HELPDIR}" && test -d helpfiles ; then \
+@@ -200,7 +199,7 @@
+ documentation: builtins.texi
+ 
+ builtins.texi: $(MKBUILTINS)
+-	./$(MKBUILTINS) -documentonly $(DEFSRC)
++	../../gash-assets/gash -c "./$(MKBUILTINS) -documentonly $(DEFSRC)"
+ 
+ clean:
+ 	$(RM) $(OFILES) $(CREATED_FILES) $(MKBUILTINS) mkbuiltins.o libbuiltins.a
+

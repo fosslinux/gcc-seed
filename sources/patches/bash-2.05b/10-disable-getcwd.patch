@@ -1,0 +1,35 @@
+--- lib/sh/Makefile.in	2002-04-11 06:40:10.000000000 +1000
++++ lib/sh/Makefile.in  2020-04-28 19:55:47.089711701 +1000
+@@ -65,7 +65,7 @@
+ LIBRARY_NAME = libsh.a
+ 
+ # The C code source files for this library.
+-CSOURCES = clktck.c clock.c getcwd.c getenv.c oslib.c setlinebuf.c \
++CSOURCES = clktck.c clock.c getenv.c oslib.c setlinebuf.c \
+ 	   strcasecmp.c strerror.c strtod.c strtol.c strtoul.c \
+ 	   vprint.c itos.c rename.c zread.c zwrite.c shtty.c \
+ 	   inet_aton.c netconn.c netopen.c strpbrk.c timeval.c makepath.c \
+
+--- Makefile.in	2020-04-28 20:24:24.461899698 +1000
++++ Makefile.in	2020-04-28 20:23:43.221714124 +1000
+@@ -157,7 +157,7 @@
+ SH_LIBDIR = $(dot)/${LIBSUBDIR}/sh
+ SH_ABSSRC = ${topdir}/${SH_LIBSRC}
+ 
+-SHLIB_SOURCE =	${SH_LIBSRC}/clktck.c ${SH_LIBSRC}/getcwd.c \
++SHLIB_SOURCE =	${SH_LIBSRC}/clktck.c \
+ 		${SH_LIBSRC}/getenv.c ${SH_LIBSRC}/oslib.c \
+ 		${SH_LIBSRC}/setlinebuf.c \
+ 	 	${SH_LIBSRC}/strcasecmp.c ${SH_LIBSRC}/strerror.c \
+
+--- configure	2020-04-29 20:11:58.966535587 +1000
++++ configure	2020-04-29 20:11:38.666439872 +1000
+@@ -6099,7 +6099,7 @@
+ fi
+ done
+ 
+-for ac_func in getcwd strcasecmp strerror strftime strpbrk memset
++for ac_func in  strcasecmp strerror strftime strpbrk memset
+ do
+ as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ echo "$as_me:6105: checking for $ac_func" >&5

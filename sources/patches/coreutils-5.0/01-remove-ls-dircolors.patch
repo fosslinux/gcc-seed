@@ -1,0 +1,99 @@
+--- src/Makefile.in	2003-04-03 00:46:19.000000000 +1000
++++ src/Makefile.in.new	2020-04-30 19:45:09.261757681 +1000
+@@ -160,7 +160,7 @@
+ 
+ bin_SCRIPTS = groups @OPTIONAL_BIN_ZCRIPTS@
+ bin_PROGRAMS = chgrp chown chmod cp dd dircolors du \
+-  ginstall link ln dir vdir ls mkdir \
++  ginstall link ln dir vdir mkdir \
+   mkfifo mknod mv readlink rm rmdir shred stat sync touch unlink \
+   cat cksum comm csplit cut expand fmt fold head join md5sum \
+   nl od paste pr ptx sha1sum sort split sum tac tail tr tsort unexpand uniq wc \
+@@ -173,11 +173,11 @@
+ localedir = $(datadir)/locale
+ 
+ noinst_HEADERS = \
+-  system.h sys2.h checksum.h copy.h cp-hash.h ls.h dircolors.h remove.h \
++  system.h sys2.h checksum.h copy.h cp-hash.h remove.h \
+   chown-core.h fs.h \
+   wheel.h wheel-size.h
+ 
+-EXTRA_DIST = dcgen dircolors.hin tac-pipe.c \
++EXTRA_DIST = tac-pipe.c \
+   groups.sh nohup.sh wheel-gen.pl
+ 
+ CLEANFILES = $(SCRIPTS) su
+@@ -242,9 +242,9 @@
+ ginstall_SOURCES = install.c copy.c cp-hash.c
+ 
+ cp_SOURCES = cp.c copy.c cp-hash.c
+-dir_SOURCES = ls.c ls-dir.c
+-vdir_SOURCES = ls.c ls-vdir.c
+-ls_SOURCES = ls.c ls-ls.c
++dir_SOURCES = ls-dir.c
++vdir_SOURCES = ls-vdir.c
++ls_SOURCES =
+ chown_SOURCES = chown.c chown-core.c
+ chgrp_SOURCES = chgrp.c chown-core.c
+ 
+@@ -255,13 +255,13 @@
+ sha1sum_SOURCES = md5sum.c sha1sum.c
+ editpl = sed -e 's,@''PERL''@,$(PERL),g'
+ 
+-MAINTAINERCLEANFILES = dircolors.h \
++MAINTAINERCLEANFILES = \
+   wheel.h wheel-size.h
+ 
+ 
+ wheel_size = 5
+ 
+-BUILT_SOURCES = dircolors.h false.c wheel.h wheel-size.h
++BUILT_SOURCES = false.c wheel.h wheel-size.h
+ 
+ # false exits nonzero even with --help or --version.
+ # Tell automake to exempt it from that installcheck test.
+@@ -294,7 +294,7 @@
+ bin_PROGRAMS = chgrp$(EXEEXT) chown$(EXEEXT) chmod$(EXEEXT) cp$(EXEEXT) \
+ 	dd$(EXEEXT) dircolors$(EXEEXT) du$(EXEEXT) ginstall$(EXEEXT) \
+ 	link$(EXEEXT) ln$(EXEEXT) dir$(EXEEXT) vdir$(EXEEXT) \
+-	ls$(EXEEXT) mkdir$(EXEEXT) mkfifo$(EXEEXT) mknod$(EXEEXT) \
++	mkdir$(EXEEXT) mkfifo$(EXEEXT) mknod$(EXEEXT) \
+ 	mv$(EXEEXT) readlink$(EXEEXT) rm$(EXEEXT) rmdir$(EXEEXT) \
+ 	shred$(EXEEXT) stat$(EXEEXT) sync$(EXEEXT) touch$(EXEEXT) \
+ 	unlink$(EXEEXT) cat$(EXEEXT) cksum$(EXEEXT) comm$(EXEEXT) \
+@@ -761,8 +761,6 @@
+ @AMDEP_TRUE@	./$(DEPDIR)/install.Po ./$(DEPDIR)/join.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/kill.Po ./$(DEPDIR)/link.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/ln.Po ./$(DEPDIR)/logname.Po \
+-@AMDEP_TRUE@	./$(DEPDIR)/ls-dir.Po ./$(DEPDIR)/ls-ls.Po \
+-@AMDEP_TRUE@	./$(DEPDIR)/ls-vdir.Po ./$(DEPDIR)/ls.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/md5.Po ./$(DEPDIR)/md5sum.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/mkdir.Po ./$(DEPDIR)/mkfifo.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/mknod.Po ./$(DEPDIR)/mv.Po \
+@@ -798,7 +796,7 @@
+ 	cut.c date.c dd.c df.c $(dir_SOURCES) dircolors.c dirname.c \
+ 	du.c echo.c env.c expand.c expr.c factor.c false.c fmt.c fold.c \
+ 	$(ginstall_SOURCES) head.c hostid.c hostname.c id.c join.c \
+-	kill.c link.c ln.c logname.c $(ls_SOURCES) $(md5sum_SOURCES) \
++	kill.c link.c ln.c logname.c $(md5sum_SOURCES) \
+ 	mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c \
+ 	pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c \
+ 	readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) \
+@@ -809,7 +807,7 @@
+ HEADERS = $(noinst_HEADERS)
+ 
+ DIST_COMMON = $(noinst_HEADERS) Makefile.am Makefile.in
+-SOURCES = basename.c cat.c $(chgrp_SOURCES) chmod.c $(chown_SOURCES) chroot.c cksum.c comm.c $(cp_SOURCES) csplit.c cut.c date.c dd.c df.c $(dir_SOURCES) dircolors.c dirname.c du.c echo.c env.c expand.c expr.c factor.c false.c fmt.c fold.c $(ginstall_SOURCES) head.c hostid.c hostname.c id.c join.c kill.c link.c ln.c logname.c $(ls_SOURCES) $(md5sum_SOURCES) mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) shred.c sleep.c sort.c split.c stat.c stty.c su.c sum.c sync.c tac.c tail.c tee.c test.c touch.c tr.c true.c tsort.c tty.c uname.c unexpand.c uniq.c unlink.c uptime.c users.c $(vdir_SOURCES) wc.c who.c whoami.c yes.c
++SOURCES = basename.c cat.c $(chgrp_SOURCES) chmod.c $(chown_SOURCES) chroot.c cksum.c comm.c $(cp_SOURCES) csplit.c cut.c date.c dd.c df.c $(dir_SOURCES) dircolors.c dirname.c du.c echo.c env.c expand.c expr.c factor.c false.c fmt.c fold.c $(ginstall_SOURCES) head.c hostid.c hostname.c id.c join.c kill.c link.c ln.c logname.c $(md5sum_SOURCES) mkdir.c mkfifo.c mknod.c $(mv_SOURCES) nice.c nl.c od.c paste.c pathchk.c pinky.c pr.c printenv.c printf.c ptx.c pwd.c readlink.c $(rm_SOURCES) rmdir.c seq.c $(sha1sum_SOURCES) shred.c sleep.c sort.c split.c stat.c stty.c su.c sum.c sync.c tac.c tail.c tee.c test.c touch.c tr.c true.c tsort.c tty.c uname.c unexpand.c uniq.c unlink.c uptime.c users.c $(vdir_SOURCES) wc.c who.c whoami.c yes.c
+ 
+ all: $(BUILT_SOURCES)
+ 	$(MAKE) $(AM_MAKEFLAGS) all-am
+@@ -1506,7 +1504,7 @@
+ 	  rm -f $(installed_su); \
+ 	else :; fi
+ 
+-dircolors.h: dcgen dircolors.hin
++dircolors.h: dircolors.hin
+ 	$(PERL) -w -- $(srcdir)/dcgen $(srcdir)/dircolors.hin > $@-t
+ 	mv $@-t $@
+ 
