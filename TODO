@@ -1,0 +1,40 @@
+For this repository to be able to fufill it's goal, it needs to be able to do the following.
+
+Order of decreasing priority:
+
+1. Be able to bootstrap up to GCC, from the 357-byte seed, on x86.
+2. From this toolchain, be able to cross-compile to other archs
+   with relative simplicity.
+3. Create a trusted environment for this to run in, preferably an
+   initramfs of some kind, where there is no host system to interact
+   with.
+4. Bootstrap kernels. Waiting on a POSIX kernel to be used in the first
+   stages, but can use an old Linux instead.
+5. Be able to bootstrap up to GCC on x86_64.
+6. Add full support for ARMv6 and AARCH64.
+
+The following could be done in whatever order:
+
+1. Be able to run from a host system and not interact with the binaries
+   from the host system.
+2. Bootstrap a full Linux system and Linux distributions (out-of-scope?
+   maybe a different project?).
+
+Non-goals:
+
+1. Be able to run in a non-trusted environment, that could be littered
+   with whatever, post M2-Planet and before goal 1 in section 2.
+2. Be fast (reasonably, I don't mean years to run). This is up to the
+   upstream projects, I don't care if this takes 24 hours for now. A
+   working bootstrap is more important.
+3. Solve trusting trust at BIOS level. This is something that would
+   be extremely difficult for this project to do and is better off
+   done using some alternative project. That could be integrated here,
+   potentially. But it would have to be of high quality. It is likely
+   to do this a flash programmer would be needed anyway, to use something
+   like coreboot. One day, creating BIOS binaries to be flashed may
+   be in scope, but is not for now.
+4. Completing the bootstrap for hardware-level architectures such as
+   Knight. This would need signficiant work and is undoable for now.
+   Such a project would be better in prose form with instructions,
+   a la Linux From Scratch.
